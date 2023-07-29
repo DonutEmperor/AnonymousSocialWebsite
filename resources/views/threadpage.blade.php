@@ -7,7 +7,7 @@
 @section("content")
 <div class="thread">
     <!-- This is where your content goes -->
-    <div class="threadcontent">
+    <div class="container">
         <div class="row mb-4">
             <div class="col-md-9">
                 <div class="card">
