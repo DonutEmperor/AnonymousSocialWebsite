@@ -57,7 +57,7 @@
                     <div class="media">
                         <div class="media-body">
                             <div class="thread">
-                                <h7 class="mt-0"><a href="#">Thread Title 1</a></h7>
+                                <h7 class="mt-0"><a href="{{ route('thread') }}">Thread Title 1</a></h7>
                                 <p class="mb-0">Posted by User123 | 25 upvotes | 5 downvotes | 10 comments</p>
                                 <p>Content of Thread 1... Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.

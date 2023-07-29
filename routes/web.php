@@ -29,3 +29,5 @@ Route::get('/privacypolicy', [HomeController::class, 'viewPolicyPage'])->name('p
 Route::get('/notFound', [HomeController::class, 'viewErrorPage']);
 
 Route::get('/topic', [TopicController::class, 'viewTopicPage'])->name('topic');
+
+Route::get('/thread', [ThreadController::class, 'viewThreadPage'])->name('thread');
