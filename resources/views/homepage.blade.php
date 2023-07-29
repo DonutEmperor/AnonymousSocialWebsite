@@ -43,8 +43,8 @@
                     <div class="media">
                         <div class="media-body">
                             <div class="thread">
-                                <h7 class="mt-0"><a href="#">Thread Title 1</a></h7>
-                                <p class="mb-0">Posted by User123 | 25 upvotes | 5 downvotes | 10 comments</p>
+                                <h7 class="mt-0"><a href="{{ route('thread') }}">Thread Title 1</a></h7>
+                                <p class="mb-0">25 upvotes | 5 downvotes | 10 comments</p>
                                 <p>Content of Thread 1...</p>
                                 <button class="btn btn-sm btn-success">^</button>
                                 <button class="btn btn-sm btn-danger">v</button>
@@ -53,7 +53,7 @@
                             <br>
                             <div class="thread">
                                 <h7 class="mt-0"><a href="#">Thread Title 2</a></h7>
-                                <p class="mb-0">Posted by User123 | 20 upvotes | 2 downvotes | 5 comments</p>
+                                <p class="mb-0">20 upvotes | 2 downvotes | 5 comments</p>
                                 <p>Content of Thread 2...</p>
                                 <button class="btn btn-sm btn-success">^</button>
                                 <button class="btn btn-sm btn-danger">v</button>
@@ -62,7 +62,7 @@
                             <br>
                             <div class="thread">
                                 <h7 class="mt-0"><a href="#">Thread Title 3</a></h7>
-                                <p class="mb-0">Posted by User123 | 18 upvotes | 1 downvote | 2 comments</p>
+                                <p class="mb-0">18 upvotes | 1 downvote | 2 comments</p>
                                 <p>Content of Thread 3...</p>
                                 <button class="btn btn-sm btn-success">^</button>
                                 <button class="btn btn-sm btn-danger">v</button>
@@ -71,7 +71,7 @@
                             <br>
                             <div class="thread">
                                 <h7 class="mt-0"><a href="#">Thread Title 4</a></h7>
-                                <p class="mb-0">Posted by User123 | 15 upvotes | 3 downvotes | 7 comments</p>
+                                <p class="mb-0">15 upvotes | 3 downvotes | 7 comments</p>
                                 <p>Content of Thread 4...</p>
                                 <button class="btn btn-sm btn-success">^</button>
                                 <button class="btn btn-sm btn-danger">v</button>
