@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Topic extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
+    protected $fillable = ['board_id', 'title', 'description'];
+
+    public function board()
+    {
+        return $this->belongsTo(Board::class);
+    }
+
+    public function threads()
+    {
+        return $this->hasMany(Thread::class);
+    }
 }

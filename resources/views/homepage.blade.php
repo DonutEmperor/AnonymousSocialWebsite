@@ -48,7 +48,7 @@
                                 <p>Content of Thread 1...</p>
                                 <button class="btn btn-sm btn-success">^</button>
                                 <button class="btn btn-sm btn-danger">v</button>
-                                <button class="btn btn-sm btn-info">Comment</button>
+                                <a class="btn btn-sm btn-info" href="{{ route('thread') }}">Comment</a>
                             </div>
                             <br>
                             <div class="thread">

@@ -45,10 +45,10 @@
                     <div class="comment">
                         <form action="" method="POST">
                             @csrf
-                            <div class="form-floating mb-3">
+                            <!-- <div class="form-floating mb-3">
                                 <input type="text" class="form-control" placeholder="Header" id="headerText" value="{{ old('header') }}" required>
                                 <label for="header">Header</label>
-                            </div>
+                            </div> -->
                             <div class="form-floating">
                                 <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" required>{{ old('comments') }}</textarea>
                                 <label for="floatingTextarea2">Comments</label>
@@ -65,7 +65,6 @@
             <div class="card-body">
                 <div class="media">
                     <div class="comment">
-                        <h6>Yes</h6>
                         <p>
                             POTAOTATPDA
                         </p>
