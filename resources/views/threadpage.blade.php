@@ -13,15 +13,21 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="media">
-                            @foreach($threads as $thread)
-                            <h3 class="mt-0"><a href="#">{{$thread->title}}</a></h3>
-                            <h6>{{$thread->id}}</h6>
-                            <p>{{$thread->content}}</p>
-                            <p class="mb-3">{{$thread->upvotes}} upvotes | {{$thread->downvotes}} downvotes | {{$thread->created_at}}</p>
-                            <button class="btn btn-sm btn-success">^</button>
-                            <button class="btn btn-sm btn-danger">v</button>
-                            <a class="btn btn-sm btn-warning">Report</a>
-                            @endforeach
+                            <div class="media-body">
+                                @foreach($threads as $thread)
+                                <div class="thread">
+                                    <h3 class="mt-0"><a href="#">{{$thread->title}}</a></h3>
+                                    <h6>Thread ID: {{$thread->id}}</h6>
+                                    <p>{{$thread->content}}</p>
+                                    <p class="mb-3">{{$thread->upvotes}} upvotes | {{$thread->downvotes}} downvotes | {{$thread->created_at}}</p>
+                                    <button class="btn btn-sm btn-success">^</button>
+                                    <button class="btn btn-sm btn-danger">v</button>
+                                    <a class="btn btn-sm btn-warning">Report</a>
+
+                                </div>
+                                @endforeach
+                            </div>
+
                         </div>
                     </div>
                 </div>

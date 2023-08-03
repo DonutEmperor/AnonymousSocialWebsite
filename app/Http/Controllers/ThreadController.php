@@ -18,8 +18,9 @@ class ThreadController extends Controller
 
         $allTopics = Topic::all();
 
-        $threads = Thread::where('id', $id);
+        $threads = Thread::where('id', $id)->get();
+        // $threads = Thread::find($);
 
-        return view('threadpage', compact('navbar', 'footer', 'allTopics', 'threads'));
+        return view('threadpage', compact('navbar', 'footer', 'threads', 'allTopics'));
     }
 }
