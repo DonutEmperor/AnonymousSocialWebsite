@@ -24,6 +24,8 @@
                             <p class="mb-3">25 upvotes | 5 downvotes | #TimeStamp</p>
                             <button class="btn btn-sm btn-success">^</button>
                             <button class="btn btn-sm btn-danger">v</button>
+                            <a class="btn btn-sm btn-warning">Report</a>
+
                         </div>
                     </div>
                 </div>
@@ -71,6 +73,7 @@
                         <p class="mb-3"> 25 upvotes | 5 downvotes | #TimeStamp </p>
                         <button class="btn btn-sm btn-success">^</button>
                         <button class="btn btn-sm btn-danger">v</button>
+                        <a class="btn btn-sm btn-warning">Report</a>
                     </div>
                 </div>
             </div>

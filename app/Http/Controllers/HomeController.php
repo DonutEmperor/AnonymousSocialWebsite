@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\View\Components\navbar;
 use Illuminate\Http\Request;
+use App\Models\Topic;
 
 class HomeController extends Controller
 {
@@ -14,7 +15,9 @@ class HomeController extends Controller
 
         $navbar = "without-options";
 
-        return view('homepage', compact('navbar', 'footer'));
+        $allTopics = Topic::all();
+
+        return view('homepage', compact('navbar', 'footer', 'allTopics'));
     }
 
     public function viewAboutUs()

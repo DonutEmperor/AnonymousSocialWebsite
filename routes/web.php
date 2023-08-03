@@ -28,6 +28,8 @@ Route::get('/about', [HomeController::class, 'viewAboutUs'])->name('about');
 Route::get('/privacypolicy', [HomeController::class, 'viewPolicyPage'])->name('policy');
 Route::get('/notFound', [HomeController::class, 'viewErrorPage']);
 
-Route::get('/topic', [TopicController::class, 'viewTopicPage'])->name('topic');
+Route::get('/topiclist', [TopicController::class, 'viewTopicList'])->name('topic-list');
+Route::get('/topic/{id}', [TopicController::class, 'viewTopicPage'])->name('topic');
+
 
 Route::get('/thread', [ThreadController::class, 'viewThreadPage'])->name('thread');

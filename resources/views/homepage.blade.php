@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 text-md-right">
-                    <x-topic-box />
+                    <x-topic-box :topics="$allTopics" />
                 </div>
             </div>
 
@@ -48,6 +48,7 @@
                                 <p>Content of Thread 1...</p>
                                 <button class="btn btn-sm btn-success">^</button>
                                 <button class="btn btn-sm btn-danger">v</button>
+                                <button class="btn btn-sm btn-warning">Report</button>
                                 <a class="btn btn-sm btn-info" href="{{ route('thread') }}">Comment</a>
                             </div>
                             <br>
@@ -57,6 +58,7 @@
                                 <p>Content of Thread 2...</p>
                                 <button class="btn btn-sm btn-success">^</button>
                                 <button class="btn btn-sm btn-danger">v</button>
+                                <a class="btn btn-sm btn-warning">Report</a>
                                 <button class="btn btn-sm btn-info">Comment</button>
                             </div>
                             <br>
@@ -66,6 +68,7 @@
                                 <p>Content of Thread 3...</p>
                                 <button class="btn btn-sm btn-success">^</button>
                                 <button class="btn btn-sm btn-danger">v</button>
+                                <a class="btn btn-sm btn-warning">Report</a>
                                 <button class="btn btn-sm btn-info">Comment</button>
                             </div>
                             <br>
@@ -75,6 +78,7 @@
                                 <p>Content of Thread 4...</p>
                                 <button class="btn btn-sm btn-success">^</button>
                                 <button class="btn btn-sm btn-danger">v</button>
+                                <a class="btn btn-sm btn-warning">Report</a>
                                 <button class="btn btn-sm btn-info">Comment</button>
                             </div>
                             <br>

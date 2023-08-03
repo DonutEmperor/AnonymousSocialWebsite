@@ -14,37 +14,51 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
-                            <h2 class="card-title"> #Topic Name </h2>
+                            @foreach($topics as $topic)
+                            <h2 class="card-title"> {{$topic->title}} </h2>
+
                             <br>
                             <p>
-                                This is the topic description.
+                                {{$topic->id}}
+                                {{$topic->description}}
                             </p>
+                            @endforeach
+                            <!-- This is the "create thread" modal -->
+                            <button type="button" class="btn btn-primary mb-0 mt-3" data-bs-toggle="modal" data-bs-target="#createThread">
+                                Create New Thread
+                            </button>
+                            <div class="modal fade" id="createThread" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createThreadLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="createThreadLabel">Create New Thread</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form>
+                                                <div class="mb-1">
+                                                    <label for="thread-title" class="col-form-label">Title:</label>
+                                                    <input type="text" class="form-control" id="recipient-name">
+                                                </div>
+                                                <div class="mb-2">
+                                                    <label for="thread-content" class="col-form-label">Content:</label>
+                                                    <textarea class="form-control" id="message-text" style="height: 100px"></textarea>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Understood</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-4 text-md-right">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3>Topics</h3>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group" style="max-height: 130px; overflow-y: auto;">
-                                <!-- Existing topics with links -->
-                                <li class="list-group-item"><a href="#">Topic 1</a></li>
-                                <li class="list-group-item"><a href="#">Topic 2</a></li>
-                                <li class="list-group-item"><a href="#">Topic 3</a></li>
-                                <li class="list-group-item"><a href="#">Topic 4</a></li>
-                                <li class="list-group-item"><a href="#">Topic 2</a></li>
-                                <li class="list-group-item"><a href="#">Topic 3</a></li>
-                                <li class="list-group-item"><a href="#">Topic 4</a></li>
-                                <li class="list-group-item"><a href="#">Topic 2</a></li>
-                                <li class="list-group-item"><a href="#">Topic 3</a></li>
-                                <li class="list-group-item"><a href="#">Topic 4</a></li>
-                                <!-- Additional topics will be added here as they grow -->
-                            </ul>
-                        </div>
-                    </div>
+                    <x-topic-box :topics="$allTopics" />
                 </div>
             </div>
 
