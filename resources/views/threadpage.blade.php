@@ -37,16 +37,15 @@
                 <x-topic-box :topics="$allTopics" />
             </div>
         </div>
-        <br>
 
         <div>
-            <h6 class="text-decoration-underline">Comments (10)</h6>
+            <h6 class="text-decoration-underline">Comments({{$commentCount}})</h6>
         </div>
 
         <div class="card col-8">
             <div class="card-body">
                 <div class="media">
-                    <div class="comment">
+                    <div class="create-comment">
                         <form action="" method="POST">
                             @csrf
                             <!-- <div class="form-floating mb-3">
@@ -68,15 +67,17 @@
         <div class="card col-8 mt-3">
             <div class="card-body">
                 <div class="media">
-                    <div class="comment">
-                        <p>
-                            POTAOTATPDA
-                        </p>
-                        <p class="mb-3"> 25 upvotes | 5 downvotes | #TimeStamp </p>
+                    @foreach($comments as $comment)
+                    <div class="comment mb-3">
+                        <h6>
+                            {{$comment->body}}
+                        </h6>
+                        <p class="mb-3"> {{$comment->upvotes}} upvotes | {{$comment->downvotes}} downvotes | {{$comment->created_at}} </p>
                         <button class="btn btn-sm btn-success">^</button>
                         <button class="btn btn-sm btn-danger">v</button>
                         <a class="btn btn-sm btn-warning">Report</a>
                     </div>
+                    @endforeach
                 </div>
             </div>
         </div>

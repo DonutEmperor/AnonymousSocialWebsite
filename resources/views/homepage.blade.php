@@ -15,17 +15,10 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
-                            <h2 class="card-title">What's this</h2>
+                            <h2 class="card-title">What is CHAD PALACE?</h2>
                             <br>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.
-
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.
+                            <p class="card-text">
                             </p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.</p>
                         </div>
                     </div>
                 </div>

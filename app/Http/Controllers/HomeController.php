@@ -18,7 +18,10 @@ class HomeController extends Controller
 
         $allTopics = Topic::all();
 
-        $allThreads = Thread::all();
+        // $threadsPerPage = 3; // Number of threads per page
+        // $allThreads = Thread::orderByDesc('upvotes')->paginate($threadsPerPage);
+
+        $allThreads = Thread::orderByDesc('upvotes')->get();
 
         return view('homepage', compact('navbar', 'footer', 'allTopics', 'allThreads'));
     }

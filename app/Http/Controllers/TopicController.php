@@ -21,7 +21,9 @@ class TopicController extends Controller
 
         $allTopics = Topic::all();
 
-        return view('topic', compact('navbar', 'footer', 'topics', 'allTopics'));
+        $allThreads = Thread::where('id', $id)->orderBy('upvotes', 'desc')->get();
+
+        return view('topic', compact('navbar', 'footer', 'topics', 'allTopics', 'allThreads'));
     }
 
     public function viewTopicList()
