@@ -13,26 +13,22 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="media">
-                            <h3 class="mt-0"><a href="{{ route('thread') }}">#Thread</a></h3>
-                            <h6>#Thread-ID</h6>
-                            <p>Content of Thread 1... Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.
-
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.</p>
-                            <p class="mb-3">25 upvotes | 5 downvotes | #TimeStamp</p>
+                            @foreach($threads as $thread)
+                            <h3 class="mt-0"><a href="#">{{$thread->title}}</a></h3>
+                            <h6>{{$thread->id}}</h6>
+                            <p>{{$thread->content}}</p>
+                            <p class="mb-3">{{$thread->upvotes}} upvotes | {{$thread->downvotes}} downvotes | {{$thread->created_at}}</p>
                             <button class="btn btn-sm btn-success">^</button>
                             <button class="btn btn-sm btn-danger">v</button>
                             <a class="btn btn-sm btn-warning">Report</a>
-
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-3 text-md-right">
-                <x-topic-box />
+                <x-topic-box :topics="$allTopics" />
             </div>
         </div>
         <br>

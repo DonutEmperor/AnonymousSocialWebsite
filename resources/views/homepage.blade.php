@@ -42,46 +42,17 @@
                     <!-- Most upvoted thread here -->
                     <div class="media">
                         <div class="media-body">
+                            @foreach($allThreads as $thread)
                             <div class="thread">
-                                <h7 class="mt-0"><a href="{{ route('thread') }}">Thread Title 1</a></h7>
-                                <p class="mb-0">25 upvotes | 5 downvotes | 10 comments</p>
-                                <p>Content of Thread 1...</p>
+                                <h7 class="mt-0"><a href="{{ route('thread', ['id' => $thread->id]) }}">{{$thread->title}}</a></h7>
+                                <p class="mb-0">{{$thread->upvotes}} upvotes | {{$thread->downvotes}} downvotes | 10 comments</p>
+                                <p>{{$thread->content}}.</p>
                                 <button class="btn btn-sm btn-success">^</button>
                                 <button class="btn btn-sm btn-danger">v</button>
                                 <button class="btn btn-sm btn-warning">Report</button>
-                                <a class="btn btn-sm btn-info" href="{{ route('thread') }}">Comment</a>
+                                <a class="btn btn-sm btn-info" href="{{ route('thread', ['id' => $thread->id]) }}">Comment</a>
                             </div>
-                            <br>
-                            <div class="thread">
-                                <h7 class="mt-0"><a href="#">Thread Title 2</a></h7>
-                                <p class="mb-0">20 upvotes | 2 downvotes | 5 comments</p>
-                                <p>Content of Thread 2...</p>
-                                <button class="btn btn-sm btn-success">^</button>
-                                <button class="btn btn-sm btn-danger">v</button>
-                                <a class="btn btn-sm btn-warning">Report</a>
-                                <button class="btn btn-sm btn-info">Comment</button>
-                            </div>
-                            <br>
-                            <div class="thread">
-                                <h7 class="mt-0"><a href="#">Thread Title 3</a></h7>
-                                <p class="mb-0">18 upvotes | 1 downvote | 2 comments</p>
-                                <p>Content of Thread 3...</p>
-                                <button class="btn btn-sm btn-success">^</button>
-                                <button class="btn btn-sm btn-danger">v</button>
-                                <a class="btn btn-sm btn-warning">Report</a>
-                                <button class="btn btn-sm btn-info">Comment</button>
-                            </div>
-                            <br>
-                            <div class="thread">
-                                <h7 class="mt-0"><a href="#">Thread Title 4</a></h7>
-                                <p class="mb-0">15 upvotes | 3 downvotes | 7 comments</p>
-                                <p>Content of Thread 4...</p>
-                                <button class="btn btn-sm btn-success">^</button>
-                                <button class="btn btn-sm btn-danger">v</button>
-                                <a class="btn btn-sm btn-warning">Report</a>
-                                <button class="btn btn-sm btn-info">Comment</button>
-                            </div>
-                            <br>
+                            @endforeach
                         </div>
                     </div>
                     <!-- Additional hot threads can be added here -->

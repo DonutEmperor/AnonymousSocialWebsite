@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\View\Components\navbar;
 use Illuminate\Http\Request;
 use App\Models\Topic;
+use App\Models\Thread;
 
 class HomeController extends Controller
 {
@@ -17,7 +18,9 @@ class HomeController extends Controller
 
         $allTopics = Topic::all();
 
-        return view('homepage', compact('navbar', 'footer', 'allTopics'));
+        $allThreads = Thread::all();
+
+        return view('homepage', compact('navbar', 'footer', 'allTopics', 'allThreads'));
     }
 
     public function viewAboutUs()

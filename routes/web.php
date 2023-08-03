@@ -32,4 +32,4 @@ Route::get('/topiclist', [TopicController::class, 'viewTopicList'])->name('topic
 Route::get('/topic/{id}', [TopicController::class, 'viewTopicPage'])->name('topic');
 
 
-Route::get('/thread', [ThreadController::class, 'viewThreadPage'])->name('thread');
+Route::get('/thread/{id}', [ThreadController::class, 'viewThreadPage'])->name('thread');
