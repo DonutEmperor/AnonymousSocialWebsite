@@ -37,3 +37,4 @@ Route::post('/thread', [ThreadController::class, 'createNewThread'])->name('thre
 
 Route::post('/thread/{id}/upvote', [ThreadController::class, 'upvote'])->name('thread.upvote');
 Route::post('/thread/{id}/downvote', [ThreadController::class, 'downvote'])->name('thread.downvote');
+Route::post('/thread/{id}/unvote', [ThreadController::class, 'unvote'])->name('thread.unvote');

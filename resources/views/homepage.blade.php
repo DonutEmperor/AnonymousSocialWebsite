@@ -156,6 +156,7 @@
             });
         });
 
+
         function voteThread(threadId, voteType) {
             fetch(`/thread/${threadId}/${voteType}`, {
                     method: 'POST',
@@ -169,11 +170,109 @@
                     // Update the displayed counts
                     document.getElementById(`upvotes_${threadId}`).textContent = data.upvotes;
                     document.getElementById(`downvotes_${threadId}`).textContent = data.downvotes;
+
+                    // Toggle vote status and active class
+                    const upvoteButton = document.querySelector(`.upvote-button[data-id="${threadId}"]`);
+                    const downvoteButton = document.querySelector(`.downvote-button[data-id="${threadId}"]`);
+                    if (voteType === 'upvote') {
+                        if (upvoteButton.classList.contains('active')) {
+                            upvoteButton.classList.remove('active');
+                            voteType = 'unvote';
+                        } else {
+                            upvoteButton.classList.add('active');
+                            downvoteButton.classList.remove('active');
+                        }
+                    } else if (voteType === 'downvote') {
+                        if (downvoteButton.classList.contains('active')) {
+                            downvoteButton.classList.remove('active');
+                            voteType = 'unvote';
+                        } else {
+                            downvoteButton.classList.add('active');
+                            upvoteButton.classList.remove('active');
+                        }
+                    }
+
+                    if (voteType === 'unvote') {
+                        // User unvoted, remove the session value and set cookie
+                        Cookies.remove(`vote_${threadId}`);
+                        Cookies.remove(`active_${threadId}`);
+                        fetch(`/thread/${threadId}/unvote`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json',
+                            },
+                        });
+                    } else {
+                        // Set cookie for the vote and active state
+                        Cookies.set(`vote_${threadId}`, voteType);
+                        Cookies.set(`active_${threadId}`, voteType);
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         }
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // ...
+
+        // Restore active state from cookies on page load
+        const activeUpvotes = Object.keys(Cookies.get()).filter(key => key.startsWith('active_') && Cookies.get(key) === 'upvote');
+        const activeDownvotes = Object.keys(Cookies.get()).filter(key => key.startsWith('active_') && Cookies.get(key) === 'downvote');
+
+        activeUpvotes.forEach(key => {
+            const threadId = key.split('_')[1];
+            const upvoteButton = document.querySelector(`.upvote-button[data-id="${threadId}"]`);
+            upvoteButton.classList.add('active');
+        });
+
+        activeDownvotes.forEach(key => {
+            const threadId = key.split('_')[1];
+            const downvoteButton = document.querySelector(`.downvote-button[data-id="${threadId}"]`);
+            downvoteButton.classList.add('active');
+        });
+
+        // Handle unvote button clicks
+        const unvoteButtons = document.querySelectorAll('.upvote-button.active, .downvote-button.active');
+        unvoteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const threadId = this.getAttribute('data-id');
+                unvoteThread(threadId);
+            });
+        });
+
+        function unvoteThread(threadId) {
+            fetch(`/thread/${threadId}/unvote`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the displayed counts
+                    document.getElementById(`upvotes_${threadId}`).textContent = data.upvotes;
+                    document.getElementById(`downvotes_${threadId}`).textContent = data.downvotes;
+
+                    // Remove active class and remove cookies
+                    const upvoteButton = document.querySelector(`.upvote-button[data-id="${threadId}"]`);
+                    const downvoteButton = document.querySelector(`.downvote-button[data-id="${threadId}"]`);
+                    upvoteButton.classList.remove('active');
+                    downvoteButton.classList.remove('active');
+                    Cookies.remove(`vote_${threadId}`);
+                    Cookies.remove(`active_${threadId}`);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+
+        // ...
     });
 </script>
 @endsection

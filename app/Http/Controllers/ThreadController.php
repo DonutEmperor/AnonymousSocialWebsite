@@ -7,6 +7,9 @@ use App\Models\Topic;
 use App\Models\Thread;
 use App\Models\Comment;
 use PDO;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cookie;
+
 
 class ThreadController extends Controller
 {
@@ -45,8 +48,22 @@ class ThreadController extends Controller
     public function upvote(Request $request, $id)
     {
         $thread = Thread::findOrFail($id);
-        $thread->upvotes++;
-        $thread->save();
+
+        $previousVote = Cookie::get('vote_' . $thread->id);
+
+        if (!$previousVote || $previousVote === 'downvote') {
+            $thread->upvotes++;
+            if ($previousVote === 'downvote') {
+                $thread->downvotes--;
+            }
+
+            $thread->save();
+
+            Cookie::queue('vote_' . $thread->id, 'upvote');
+            Cookie::queue('active_' . $thread->id, 'upvote');
+        } else {
+            // Unvote logic here if the user clicks the same button
+        }
 
         return response()->json([
             'upvotes' => $thread->upvotes,
@@ -57,8 +74,22 @@ class ThreadController extends Controller
     public function downvote(Request $request, $id)
     {
         $thread = Thread::findOrFail($id);
-        $thread->downvotes++;
-        $thread->save();
+
+        $previousVote = Cookie::get('vote_' . $thread->id);
+
+        if (!$previousVote || $previousVote === 'upvote') {
+            $thread->downvotes++;
+            if ($previousVote === 'upvote') {
+                $thread->upvotes--;
+            }
+
+            $thread->save();
+
+            Cookie::queue('vote_' . $thread->id, 'downvote');
+            Cookie::queue('active_' . $thread->id, 'downvote');
+        } else {
+            // Unvote logic here if the user clicks the same button
+        }
 
         return response()->json([
             'upvotes' => $thread->upvotes,
@@ -66,29 +97,87 @@ class ThreadController extends Controller
         ]);
     }
 
-    // public function upvote(Request $req, $id)
+    public function unvote(Request $request, $id)
+    {
+        $thread = Thread::findOrFail($id);
+
+        $previousVote = Cookie::get('vote_' . $id);
+
+        if ($previousVote === 'upvote') {
+            $thread->upvotes--;
+        } elseif ($previousVote === 'downvote') {
+            $thread->downvotes--;
+        }
+
+        $thread->save();
+
+        Cookie::queue('vote_' . $id, null, -1); // Delete the cookie
+        Cookie::queue('active_' . $id, null, -1); // Delete the cookie
+
+        return response()->json([
+            'upvotes' => $thread->upvotes,
+            'downvotes' => $thread->downvotes,
+        ]);
+    }
+
+    // public function upvote(Request $request, $id)
     // {
     //     $thread = Thread::findOrFail($id);
 
-    //     // Increment the upvotes count
-    //     $thread->upvotes++;
+    //     if (!Session::has('vote_' . $thread->id) || Session::get('vote_' . $thread->id) === 'downvote') {
+    //         $thread->upvotes++;
+    //         $thread->downvotes--;
 
-    //     // Save the updated thread
-    //     $thread->save();
+    //         $thread->save();
 
-    //     return redirect()->back();
+    //         Session::put('vote_' . $thread->id, 'upvote');
+    //     }
+
+
+    //     return response()->json([
+    //         'upvotes' => $thread->upvotes,
+    //         'downvotes' => $thread->downvotes,
+    //     ]);
     // }
 
-    // public function downvote(Request $req, $id)
+    // public function downvote(Request $request, $id)
+    // {
+    //     $thread = Thread::findOrFail($id);
+    //     if (!Session::has('vote_' . $thread->id) || Session::get('vote_' . $thread->id) === 'upvote') {
+    //         $thread->upvotes--;
+    //         $thread->downvotes++;
+
+    //         $thread->save();
+
+    //         Session::put('vote_' . $thread->id, 'downvote');
+    //     }
+    //     return response()->json([
+    //         'upvotes' => $thread->upvotes,
+    //         'downvotes' => $thread->downvotes,
+    //     ]);
+    // }
+
+    // public function unvote(Request $request, $id)
     // {
     //     $thread = Thread::findOrFail($id);
 
-    //     // Increment the downvotes count
-    //     $thread->downvotes++;
+    //     if (Session::has('vote_' . $id)) {
+    //         $previousVote = Session::get('vote_' . $id);
 
-    //     // Save the updated thread
-    //     $thread->save();
+    //         if ($previousVote === 'upvote') {
+    //             $thread->upvotes--;
+    //         } elseif ($previousVote === 'downvote') {
+    //             $thread->downvotes--;
+    //         }
 
-    //     return redirect()->back();
+    //         $thread->save();
+
+    //         Session::forget('vote_' . $id);
+    //     }
+
+    //     return response()->json([
+    //         'upvotes' => $thread->upvotes,
+    //         'downvotes' => $thread->downvotes,
+    //     ]);
     // }
 }
