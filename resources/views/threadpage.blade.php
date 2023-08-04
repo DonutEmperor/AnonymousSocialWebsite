@@ -8,6 +8,7 @@
 <div class="thread">
     <!-- This is where your content goes -->
     <div class="container">
+        <a href="{{ url()->previous() }}" class="btn btn-primary mb-4">Back</a>
         <div class="row mb-4">
             <div class="col-md-9">
                 <div class="card">
@@ -16,7 +17,7 @@
                             <div class="media-body">
                                 @foreach($threads as $thread)
                                 <div class="thread">
-                                    <h3 class="mt-0"><a href="#">{{$thread->title}}</a></h3>
+                                    <h3 class="mt-0">{{$thread->title}}</h3>
                                     <h6>Thread ID: {{$thread->id}}</h6>
                                     <p>{{$thread->content}}</p>
                                     <p class="mb-3">{{$thread->upvotes}} upvotes | {{$thread->downvotes}} downvotes | {{$thread->created_at}}</p>
@@ -67,6 +68,7 @@
         <div class="card col-8 mt-3">
             <div class="card-body">
                 <div class="media">
+                    @if(count($comments) > 0)
                     @foreach($comments as $comment)
                     <div class="comment mb-3">
                         <h6>
@@ -78,6 +80,9 @@
                         <a class="btn btn-sm btn-warning">Report</a>
                     </div>
                     @endforeach
+                    @else
+                    <p>No comments available.</p>
+                    @endif
                 </div>
             </div>
         </div>

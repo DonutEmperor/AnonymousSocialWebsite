@@ -8,6 +8,7 @@
 <div class="topic-list-content">
     <!-- This is where your content goes -->
     <div class="container">
+        <a href="{{ url()->previous() }}" class="btn btn-primary mb-4">Back</a>
         <div class="row">
             <h2 class="text-center">Topics</h2>
 

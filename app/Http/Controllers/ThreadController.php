@@ -28,4 +28,35 @@ class ThreadController extends Controller
 
         return view('threadpage', compact('navbar', 'footer', 'threads', 'allTopics', 'comments', 'commentCount'));
     }
+
+    public function createNewThread(Request $req)
+    {
+        $thread = new Thread();
+        $thread->title = $req->input('title');
+        $thread->content = $req->input('content');
+        $thread->topic_id = $req->input('topic_id');
+
+        $thread->save();
+
+        return redirect()->route('topic', ['id' => $thread->topic_id])->with('success', 'Thread created successfully.');
+    }
+
+    public function voteClick(Request $req)
+    {
+        $threadId = $req->input('threadId');
+        $action = $req->input('action');
+
+        // Find the thread based on $threadId and increment/decrement the upvotes count
+        // Save the changes to the database
+
+        $thread = Thread::find($threadId);
+        if ($action === 'up') {
+            $thread->upvotes++;
+        } elseif ($action === 'down') {
+            $thread->downvotes++;
+        }
+        $thread->save();
+
+        return response()->json(['upvotes' => $thread->upvotes]);
+    }
 }

@@ -9,8 +9,8 @@ class Thread extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
-    protected $fillable = ['topic_id', 'title', 'content', 'upvotes', 'downvotes', 'report_count'];
+    // public $timestamps = false;
+    protected $fillable = ['topic_id', 'title', 'content', 'created_at', 'updated_at', 'upvotes', 'downvotes', 'report_count'];
 
     public function topic()
     {
