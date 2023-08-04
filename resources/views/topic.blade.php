@@ -9,7 +9,7 @@
     <!-- This is where your content goes -->
     <div class="topiccontent">
         <div class="container">
-
+            <a href="{{ url()->previous() }}" class="btn btn-primary mb-4">Back</a>
             <div class="row mb-4">
                 <div class="col-md-8">
                     <div class="card">
@@ -43,11 +43,11 @@
                                                 <input type="hidden" name="topic_id" id="topic_id_input">
                                                 <div class="mb-1">
                                                     <label for="thread-title" class="col-form-label">Title:</label>
-                                                    <input type="text" class="form-control" name="title">
+                                                    <input type="text" class="form-control" name="title" required data-validation-required-message="Please enter a title for your thread.">
                                                 </div>
                                                 <div class="mb-2">
                                                     <label for="thread-content" class="col-form-label">Content:</label>
-                                                    <textarea class="form-control" name="content" style="height: 300px"></textarea>
+                                                    <textarea class="form-control" name="content" style="height: 300px" required data-validation-required-message="Please enter a content for your thread."></textarea>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-primary">Create Thread</button>
@@ -78,14 +78,16 @@
                             @foreach($allThreads as $thread)
                             <div class="thread mb-3">
                                 <h7 class="mt-0"><a href="{{ route('thread', ['id' => $thread->id]) }}">{{$thread->title}}</a></h7>
-                                <p class="mb-0">{{$thread->upvotes}} upvotes | {{$thread->downvotes}} downvotes </p>
+                                <!-- <p class="mb-0">{{$thread->upvotes}} upvotes | {{$thread->downvotes}} downvotes </p> -->
+                                <p class="mb-0">
+                                    <span id="upvotes_{{$thread->id}}">{{$thread->upvotes}}</span> upvotes |
+                                    <span id="downvotes_{{$thread->id}}">{{$thread->downvotes}}</span> downvotes |
+                                    {{$thread->created_at}}
+                                </p>
                                 <p style="overflow:hidden;">{{$thread->content}}.</p>
-                                <!-- <p class="content-preview" style="max-height: 100px;overflow:hidden">{{$thread->content}}</p>
-                                <p class="content-full d-none">{{$thread->content}} </p>
-                                <a class="read-more btn btn-link" href="#">Read more</a> -->
-                                <button class="btn btn-sm btn-success">^</button>
-                                <button class="btn btn-sm btn-danger">v</button>
-                                <button class="btn btn-sm btn-warning">Report</button>
+                                <button class="btn btn-sm btn-success upvote-button" data-id="{{$thread->id}}">^</button>
+                                <button class="btn btn-sm btn-danger downvote-button" data-id="{{$thread->id}}">v</button>
+                                <a class="btn btn-sm btn-warning">Report</a>
                                 <a class="btn btn-sm btn-info" href="{{ route('thread', ['id' => $thread->id]) }}">Comment</a>
                             </div>
                             @endforeach
@@ -126,6 +128,48 @@
             $(this).prev('.thread-content').find('.content-full').toggleClass('d-none');
             $(this).text($(this).text() === 'Read more' ? 'Read less' : 'Read more');
         });
+    });
+</script>
+
+<!-- handle votes clicks -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle upvote button clicks
+        const upvoteButtons = document.querySelectorAll('.upvote-button');
+        upvoteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const threadId = this.getAttribute('data-id');
+                voteThread(threadId, 'upvote');
+            });
+        });
+
+        // Handle downvote button clicks
+        const downvoteButtons = document.querySelectorAll('.downvote-button');
+        downvoteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const threadId = this.getAttribute('data-id');
+                voteThread(threadId, 'downvote');
+            });
+        });
+
+        function voteThread(threadId, voteType) {
+            fetch(`/thread/${threadId}/${voteType}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the displayed counts
+                    document.getElementById(`upvotes_${threadId}`).textContent = data.upvotes;
+                    document.getElementById(`downvotes_${threadId}`).textContent = data.downvotes;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
     });
 </script>
 @endsection

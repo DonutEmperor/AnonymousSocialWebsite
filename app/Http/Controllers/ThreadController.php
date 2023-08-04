@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Topic;
 use App\Models\Thread;
 use App\Models\Comment;
+use PDO;
 
 class ThreadController extends Controller
 {
@@ -41,22 +42,53 @@ class ThreadController extends Controller
         return redirect()->route('topic', ['id' => $thread->topic_id])->with('success', 'Thread created successfully.');
     }
 
-    public function voteClick(Request $req)
+    public function upvote(Request $request, $id)
     {
-        $threadId = $req->input('threadId');
-        $action = $req->input('action');
-
-        // Find the thread based on $threadId and increment/decrement the upvotes count
-        // Save the changes to the database
-
-        $thread = Thread::find($threadId);
-        if ($action === 'up') {
-            $thread->upvotes++;
-        } elseif ($action === 'down') {
-            $thread->downvotes++;
-        }
+        $thread = Thread::findOrFail($id);
+        $thread->upvotes++;
         $thread->save();
 
-        return response()->json(['upvotes' => $thread->upvotes]);
+        return response()->json([
+            'upvotes' => $thread->upvotes,
+            'downvotes' => $thread->downvotes,
+        ]);
     }
+
+    public function downvote(Request $request, $id)
+    {
+        $thread = Thread::findOrFail($id);
+        $thread->downvotes++;
+        $thread->save();
+
+        return response()->json([
+            'upvotes' => $thread->upvotes,
+            'downvotes' => $thread->downvotes,
+        ]);
+    }
+
+    // public function upvote(Request $req, $id)
+    // {
+    //     $thread = Thread::findOrFail($id);
+
+    //     // Increment the upvotes count
+    //     $thread->upvotes++;
+
+    //     // Save the updated thread
+    //     $thread->save();
+
+    //     return redirect()->back();
+    // }
+
+    // public function downvote(Request $req, $id)
+    // {
+    //     $thread = Thread::findOrFail($id);
+
+    //     // Increment the downvotes count
+    //     $thread->downvotes++;
+
+    //     // Save the updated thread
+    //     $thread->save();
+
+    //     return redirect()->back();
+    // }
 }

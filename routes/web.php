@@ -35,4 +35,5 @@ Route::get('/topic/{id}', [TopicController::class, 'viewTopicPage'])->name('topi
 Route::get('/thread/{id}', [ThreadController::class, 'viewThreadPage'])->name('thread');
 Route::post('/thread', [ThreadController::class, 'createNewThread'])->name('thread.create');
 
-Route::post('/vote-click', [ThreadController::class, 'voteClick'])->name('vote.click');
+Route::post('/thread/{id}/upvote', [ThreadController::class, 'upvote'])->name('thread.upvote');
+Route::post('/thread/{id}/downvote', [ThreadController::class, 'downvote'])->name('thread.downvote');

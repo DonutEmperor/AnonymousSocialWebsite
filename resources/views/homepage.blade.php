@@ -52,11 +52,15 @@
                             @foreach($allThreads as $thread)
                             @if($displayCount < 5) <div class="thread mb-3">
                                 <h7 class="mt-0"><a href="{{ route('thread', ['id' => $thread->id]) }}">{{ $thread->title }}</a></h7>
-                                <p class="mb-0">{{ $thread->upvotes }} upvotes | {{ $thread->downvotes }} downvotes</p>
+                                <p class="mb-0">
+                                    <span id="upvotes_{{$thread->id}}">{{$thread->upvotes}}</span> upvotes |
+                                    <span id="downvotes_{{$thread->id}}">{{$thread->downvotes}}</span> downvotes |
+                                    {{$thread->created_at}}
+                                </p>
                                 <p>{{ $thread->content }}.</p>
-                                <button class="btn btn-sm btn-success">^</button>
-                                <button class="btn btn-sm btn-danger">v</button>
-                                <button class="btn btn-sm btn-warning">Report</button>
+                                <button class="btn btn-sm btn-success upvote-button" data-id="{{$thread->id}}">^</button>
+                                <button class="btn btn-sm btn-danger downvote-button" data-id="{{$thread->id}}">v</button>
+                                <a class="btn btn-sm btn-warning">Report</a>
                                 <a class="btn btn-sm btn-info" href="{{ route('thread', ['id' => $thread->id]) }}">Comment</a>
                         </div>
                         @php
@@ -132,4 +136,44 @@
 
 @section("script")
 <!-- This is where your js/other scripts code goes -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle upvote button clicks
+        const upvoteButtons = document.querySelectorAll('.upvote-button');
+        upvoteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const threadId = this.getAttribute('data-id');
+                voteThread(threadId, 'upvote');
+            });
+        });
+
+        // Handle downvote button clicks
+        const downvoteButtons = document.querySelectorAll('.downvote-button');
+        downvoteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const threadId = this.getAttribute('data-id');
+                voteThread(threadId, 'downvote');
+            });
+        });
+
+        function voteThread(threadId, voteType) {
+            fetch(`/thread/${threadId}/${voteType}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the displayed counts
+                    document.getElementById(`upvotes_${threadId}`).textContent = data.upvotes;
+                    document.getElementById(`downvotes_${threadId}`).textContent = data.downvotes;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    });
+</script>
 @endsection
