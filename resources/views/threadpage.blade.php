@@ -70,6 +70,12 @@
             </div>
         </div>
 
+        @if(session('success_comment'))
+        <div class="alert alert-success mt-3">
+            {{ session('success_comment') }}
+        </div>
+        @endif
+
         <div class="card col-8 mt-3">
             <div class="card-body">
                 <div class="media">

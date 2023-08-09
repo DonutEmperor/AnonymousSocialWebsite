@@ -9,6 +9,7 @@ use App\Models\Comment;
 use PDO;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Database\QueryException;
 
 
 class ThreadController extends Controller
@@ -35,14 +36,23 @@ class ThreadController extends Controller
 
     public function createNewThread(Request $req)
     {
-        $thread = new Thread();
-        $thread->title = $req->input('title');
-        $thread->content = $req->input('content');
-        $thread->topic_id = $req->input('topic_id');
+        try {
+            $thread = new Thread();
+            $thread->title = $req->input('title');
+            $thread->content = $req->input('content');
+            $thread->topic_id = $req->input('topic_id');
 
-        $thread->save();
+            $thread->save();
 
-        return redirect()->route('topic', ['id' => $thread->topic_id])->with('success', 'Thread created successfully.');
+            return redirect()->route('topic', ['id' => $thread->topic_id])->with('success_thread', 'Thread created successfully.');
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23000') {
+                // Unique constraint violation (duplicate title)
+                return redirect()->back()->withErrors(['title' => 'A thread with this title already exists.']);
+            }
+
+            // Handle other query exceptions if needed
+        }
     }
 
     public function upvote(Request $request, $id)
@@ -150,7 +160,7 @@ class ThreadController extends Controller
         $comment->save();
 
         // Redirect back or perform any other action
-        return redirect()->route('thread', ['id' => $comment->thread_id])->with('success', 'Thread created successfully.');
+        return redirect()->route('thread', ['id' => $comment->thread_id])->with('success_comment', 'Comment created successfully.');
 
         // return redirect()->back()->with('success', 'Comment added successfully');
     }

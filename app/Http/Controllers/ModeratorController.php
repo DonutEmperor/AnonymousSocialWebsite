@@ -11,4 +11,8 @@ class ModeratorController extends Controller
     {
         return view('moderatorlogin');
     }
+
+    public function logout()
+    {
+    }
 }

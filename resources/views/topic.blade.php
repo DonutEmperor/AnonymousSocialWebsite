@@ -67,6 +67,16 @@
                 </div>
             </div>
 
+            <!-- Success flash session display -->
+            @if(session('success_thread'))
+            <div class="alert alert-success mt-3">
+                {{ session('success_thread') }}
+            </div>
+            @endif
+            <!-- Error flash session display -->
+            @error('title')
+            <div class="alert alert-danger mt-3">{{ $message }}</div>
+            @enderror
             <div class="card mb-4">
                 <div class="card-header">
                     <h3>Topic Threads</h3>

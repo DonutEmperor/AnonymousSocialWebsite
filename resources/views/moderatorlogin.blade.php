@@ -304,13 +304,17 @@
     <h1 class="ariu">Moderator Login</h1>
 
     <div class="container">
-        <form action="" method="">
+        <form action="" method="POST">
+            @csrf
             <label for="username">Username: </label>
             <input type="text" id="username" placeholder="Enter username..." />
             <label for="password">Password:</label>
             <input type="password" id="password" placeholder="Enter password..." />
             <button type="submit">Login</button>
+            <br>
+            <a style="text-align: center;" href="">Forgot Password?</a>
         </form>
+
         <div class="veshi-m"></div>
         <div class="veshi-d"></div>
         <div class="fytyra-ariut">
