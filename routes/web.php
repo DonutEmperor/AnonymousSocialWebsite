@@ -44,4 +44,9 @@ Route::post('/createComment', [ThreadController::class, 'createComment'])->name(
 Route::post('/comment/{id}/upvote', [ThreadController::class, 'commentUpvote'])->name('comment.upvote');
 Route::post('/comment/{id}/downvote', [ThreadController::class, 'commentDownvote'])->name('comment.downvote');
 
-Route::get('/login', [ModeratorController::class, 'login'])->name('login');
+Route::get('/login', [ModeratorController::class, 'showLogin'])->name('login');
+Route::post('/login', [ModeratorController::class, 'login']);
+Route::get('/logout', [ModeratorController::class, 'logout'])->name('logout');
+
+Route::get('/generateMod', [ModeratorController::class, 'createSingleUser'])->name('user.generate');
+Route::get('/modPage', [ModeratorController::class, 'viewModPage'])->name('mod');

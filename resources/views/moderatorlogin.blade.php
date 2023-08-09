@@ -304,12 +304,17 @@
     <h1 class="ariu">Moderator Login</h1>
 
     <div class="container">
-        <form action="" method="POST">
+        <form action="{{ route('login') }}" method="POST">
             @csrf
+            @if ($errors->has('message'))
+            <div style="text-align: center; color:red; margin-bottom:2px">
+                {{ $errors->first('message') }}
+            </div>
+            @endif
             <label for="username">Username: </label>
-            <input type="text" id="username" placeholder="Enter username..." />
+            <input type="text" id="username" name="username" placeholder="Enter username..." required />
             <label for="password">Password:</label>
-            <input type="password" id="password" placeholder="Enter password..." />
+            <input type="password" id="password" name="password" placeholder="Enter password..." required />
             <button type="submit">Login</button>
             <br>
             <a style="text-align: center;" href="">Forgot Password?</a>
