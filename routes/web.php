@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
@@ -38,3 +39,7 @@ Route::post('/thread', [ThreadController::class, 'createNewThread'])->name('thre
 Route::post('/thread/{id}/upvote', [ThreadController::class, 'upvote'])->name('thread.upvote');
 Route::post('/thread/{id}/downvote', [ThreadController::class, 'downvote'])->name('thread.downvote');
 Route::post('/thread/{id}/unvote', [ThreadController::class, 'unvote'])->name('thread.unvote');
+
+Route::get('/comment/{id}', [ThreadController::class, 'createComment']);
+
+Route::get('/login', [ModeratorController::class, 'login'])->name('login');

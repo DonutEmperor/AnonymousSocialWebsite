@@ -12,6 +12,9 @@
                 <div class="col-auto">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </div>
+                <div class="col-auto">
+                    <a class="btn btn-outline-primary" href="{{ route('login') }}">Moderator Login</a>
+                </div>
             </div>
         </form>
     </div>

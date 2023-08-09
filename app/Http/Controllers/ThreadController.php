@@ -120,6 +120,10 @@ class ThreadController extends Controller
         ]);
     }
 
+    public function createComment(Request $request, $id)
+    {
+    }
+
     // public function upvote(Request $request, $id)
     // {
     //     $thread = Thread::findOrFail($id);
