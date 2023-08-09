@@ -63,6 +63,12 @@ class ThreadController extends Controller
             Cookie::queue('active_' . $thread->id, 'upvote');
         } else {
             // Unvote logic here if the user clicks the same button
+            // Unvote logic
+            $thread->upvotes--; // Decrement upvotes
+            $thread->save();
+
+            Cookie::queue('vote_' . $thread->id, null); // Remove vote cookie
+            Cookie::queue('active_' . $thread->id, null); // Remove active cookie
         }
 
         return response()->json([
@@ -89,6 +95,12 @@ class ThreadController extends Controller
             Cookie::queue('active_' . $thread->id, 'downvote');
         } else {
             // Unvote logic here if the user clicks the same button
+            // Unvote logic
+            $thread->downvotes--; // Decrement upvotes
+            $thread->save();
+
+            Cookie::queue('vote_' . $thread->id, null); // Remove vote cookie
+            Cookie::queue('active_' . $thread->id, null); // Remove active cookie
         }
 
         return response()->json([
@@ -97,6 +109,7 @@ class ThreadController extends Controller
         ]);
     }
 
+    //Actually useless -> schedule to remove in the near future 
     public function unvote(Request $request, $id)
     {
         $thread = Thread::findOrFail($id);
@@ -120,9 +133,90 @@ class ThreadController extends Controller
         ]);
     }
 
-    public function createComment(Request $request, $id)
+    public function createComment(Request $request)
     {
+        // Validate the input
+        $request->validate([
+            'thread_id' => 'required|exists:threads,id', // Validate against your Thread model
+            'comments' => 'required|string',
+        ]);
+
+        // Create a new comment
+        $comment = new Comment();
+        $comment->thread_id = $request->input('thread_id');
+        $comment->body = $request->input('comments');
+        // You might want to set other attributes here, such as user_id, upvotes, etc.
+
+        $comment->save();
+
+        // Redirect back or perform any other action
+        return redirect()->route('thread', ['id' => $comment->thread_id])->with('success', 'Thread created successfully.');
+
+        // return redirect()->back()->with('success', 'Comment added successfully');
     }
+
+    public function commentUpvote(Request $request, $id)
+    {
+        $comment = Comment::findOrFail($id);
+
+        $previousVote = Cookie::get('comment_vote_' . $comment->id);
+
+        if (!$previousVote || $previousVote === 'downvote') {
+            $comment->upvotes++;
+            if ($previousVote === 'downvote') {
+                $comment->downvotes--;
+            }
+
+            $comment->save();
+
+            Cookie::queue('comment_vote_' . $comment->id, 'upvote');
+            Cookie::queue('comment_active_' . $comment->id, 'upvote');
+        } else {
+            // Unvote logic here if the user clicks the same button
+            $comment->upvotes--; // Decrement upvotes
+            $comment->save();
+
+            Cookie::queue('comment_vote_' . $comment->id, null); // Remove vote cookie
+            Cookie::queue('comment_active_' . $comment->id, null); // Remove active cookie
+        }
+
+        return response()->json([
+            'upvotes' => $comment->upvotes,
+            'downvotes' => $comment->downvotes,
+        ]);
+    }
+
+    public function commentDownvote(Request $request, $id)
+    {
+        $comment = Comment::findOrFail($id);
+
+        $previousVote = Cookie::get('comment_vote_' . $comment->id);
+
+        if (!$previousVote || $previousVote === 'upvote') {
+            $comment->downvotes++;
+            if ($previousVote === 'upvote') {
+                $comment->upvotes--;
+            }
+
+            $comment->save();
+
+            Cookie::queue('comment_vote_' . $comment->id, 'downvote');
+            Cookie::queue('comment_active_' . $comment->id, 'downvote');
+        } else {
+            // Unvote logic here if the user clicks the same button
+            $comment->downvotes--; // Decrement downvotes
+            $comment->save();
+
+            Cookie::queue('comment_vote_' . $comment->id, null); // Remove vote cookie
+            Cookie::queue('comment_active_' . $comment->id, null); // Remove active cookie
+        }
+
+        return response()->json([
+            'upvotes' => $comment->upvotes,
+            'downvotes' => $comment->downvotes,
+        ]);
+    }
+
 
     // public function upvote(Request $request, $id)
     // {

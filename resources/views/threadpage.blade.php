@@ -50,17 +50,19 @@
             <div class="card-body">
                 <div class="media">
                     <div class="create-comment">
-                        <form action="" method="POST">
+                        <form action="{{route('comment.create')}}" method="POST">
                             @csrf
                             <!-- <div class="form-floating mb-3">
                                 <input type="text" class="form-control" placeholder="Header" id="headerText" value="{{ old('header') }}" required>
                                 <label for="header">Header</label>
                             </div> -->
                             <div class="form-floating">
-                                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" required>{{ old('comments') }}</textarea>
+                                <input type="hidden" name="thread_id" value="{{ $thread->id }}">
+                                <textarea class="form-control" placeholder="Leave a comment here" name="comments" id="floatingTextarea" style="height: 100px" required>{{ old('comments') }}</textarea>
                                 <label for="floatingTextarea2">Comments</label>
                                 <br>
-                                <button type="submit" class="btn btn-outline-success btn-sm" style="float:right">Submit</button>
+                                <!-- <button type="submit" class="btn btn-outline-success btn-sm" style="float:right">Submit</button> -->
+                                <button type="submit" class="btn btn-outline-success btn-sm submit-comment" style="float:right">Submit</button>
                             </div>
                         </form>
                     </div>
@@ -77,9 +79,15 @@
                         <h6>
                             {{$comment->body}}
                         </h6>
-                        <p class="mb-3"> {{$comment->upvotes}} upvotes | {{$comment->downvotes}} downvotes | {{$comment->created_at}} </p>
-                        <button class="btn btn-sm btn-success">^</button>
-                        <button class="btn btn-sm btn-danger">v</button>
+                        <p class="mb-3">
+                            <span id="c-upvotes_{{$comment->id}}">{{$comment->upvotes}}</span> upvotes |
+                            <span id="c-downvotes_{{$comment->id}}">{{$comment->downvotes}}</span> downvotes |
+                            {{$comment->created_at}}
+                        </p>
+                        <!-- <p class="mb-3"> {{$comment->upvotes}} upvotes | {{$comment->downvotes}} downvotes | {{$comment->created_at}} </p> -->
+                        <button class="btn btn-sm btn-success comment-upvote-button" data-comment-id="{{ $comment->id }}">^</button>
+                        <button class="btn btn-sm btn-danger comment-downvote-button" data-comment-id="{{ $comment->id }}">v</button>
+
                         <a class="btn btn-sm btn-warning">Report</a>
                     </div>
                     @endforeach
@@ -97,6 +105,12 @@
 @section("script")
 <!-- This is where your js/other scripts code goes -->
 <script>
+    $(document).ready(function() {
+        $('.submit-comment').on('click', function() {
+            var threadId = $(this).data('id');
+            $('#thread_id_input').val(threadId);
+        });
+    });
     document.addEventListener('DOMContentLoaded', function() {
         // Handle upvote button clicks
         const upvoteButtons = document.querySelectorAll('.upvote-button');
@@ -129,6 +143,44 @@
                     // Update the displayed counts
                     document.getElementById(`upvotes_${threadId}`).textContent = data.upvotes;
                     document.getElementById(`downvotes_${threadId}`).textContent = data.downvotes;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // Handle comment upvote and downvote button clicks
+        const commentUpvoteButtons = document.querySelectorAll('.comment-upvote-button');
+        const commentDownvoteButtons = document.querySelectorAll('.comment-downvote-button');
+
+        commentUpvoteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const commentId = this.getAttribute('data-comment-id');
+                voteComment(commentId, 'upvote');
+            });
+        });
+
+        commentDownvoteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const commentId = this.getAttribute('data-comment-id');
+                voteComment(commentId, 'downvote');
+            });
+        });
+
+
+        // Function to handle comment voting
+        function voteComment(commentId, voteType) {
+            fetch(`/comment/${commentId}/${voteType}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById(`c-upvotes_${commentId}`).textContent = data.upvotes;
+                    document.getElementById(`c-downvotes_${commentId}`).textContent = data.downvotes;
                 })
                 .catch(error => {
                     console.error('Error:', error);

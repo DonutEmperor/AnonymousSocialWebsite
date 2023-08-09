@@ -3,7 +3,10 @@
     margin: 0;
 }
 
-.upvote-button.active,
-.downvote-button.active {
+.upvote-button.active {
     box-shadow: 0 0 10px rgba(0, 255, 0, 0.7); /* Change color and intensity as desired */
+}
+
+.downvote-button.active{
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.7); /* Change color and intensity as desired */
 }

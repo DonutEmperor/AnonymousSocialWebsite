@@ -40,6 +40,8 @@ Route::post('/thread/{id}/upvote', [ThreadController::class, 'upvote'])->name('t
 Route::post('/thread/{id}/downvote', [ThreadController::class, 'downvote'])->name('thread.downvote');
 Route::post('/thread/{id}/unvote', [ThreadController::class, 'unvote'])->name('thread.unvote');
 
-Route::get('/comment/{id}', [ThreadController::class, 'createComment']);
+Route::post('/createComment', [ThreadController::class, 'createComment'])->name('comment.create');
+Route::post('/comment/{id}/upvote', [ThreadController::class, 'commentUpvote'])->name('comment.upvote');
+Route::post('/comment/{id}/downvote', [ThreadController::class, 'commentDownvote'])->name('comment.downvote');
 
 Route::get('/login', [ModeratorController::class, 'login'])->name('login');
