@@ -9,7 +9,16 @@
     <!-- This is where your content goes -->
     <div class="homecontent">
         <div class="container">
+            @if(session('access-error'))
+            <div class="alert alert-danger">
+                {{ session('access-error') }}
+            </div>
+            @elseif(session('logout-success'))
+            <div class="alert alert-warning">
+                {{session('logout-success')}}
+            </div>
 
+            @endif
             <!-- Row with "What's this" and "Topics" -->
             <div class="row mb-4">
                 <div class="col-md-8">

@@ -31,8 +31,8 @@
     <!-- Navbar -->
     @if($navbar == 'without-options')
     <x-navbar-without-options />
-    @elseif($navbar == 'logged-in-with-options')
-    <x-navbar-with-options />
+    @elseif($navbar == 'mod-navbar')
+    <x-moderator-navbar />
     @else
 
     @endif

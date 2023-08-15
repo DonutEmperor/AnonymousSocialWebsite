@@ -49,4 +49,7 @@ Route::post('/login', [ModeratorController::class, 'login']);
 Route::get('/logout', [ModeratorController::class, 'logout'])->name('logout');
 
 Route::get('/generateMod', [ModeratorController::class, 'createSingleUser'])->name('user.generate');
-Route::get('/modPage', [ModeratorController::class, 'viewModPage'])->name('mod');
+
+Route::middleware('moderator')->group(function () {
+    Route::get('/modPage', [ModeratorController::class, 'viewModPage'])->name('mod');
+});

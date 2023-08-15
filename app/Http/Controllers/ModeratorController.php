@@ -22,7 +22,7 @@ class ModeratorController extends Controller
         if (Auth::attempt($credentials)) {
             // Authentication passed
             // return redirect()->intended('/modPage'); // Redirect to intended page after login
-            return redirect()->route('mod');
+            return redirect()->route('mod')->with('login-success', 'Logged In Successfully');
         } else {
             // Authentication failed
             return redirect()->route('login')->withErrors(['message' => 'Invalid username or password']);
@@ -32,7 +32,7 @@ class ModeratorController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('home');
+        return redirect()->route('home')->with('logout-success', 'Logged Out Successfully');
     }
 
     //temporary
@@ -49,6 +49,8 @@ class ModeratorController extends Controller
 
     public function viewModPage()
     {
-        return view('moderatorpage');
+        $footer = "true";
+        $navbar = "mod-navbar";
+        return view('moderatorpage', compact('footer', 'navbar'));
     }
 }
