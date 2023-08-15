@@ -136,6 +136,8 @@
             });
         });
 
+        applyInitialActiveState();
+
         function voteThread(threadId, voteType) {
             fetch(`/thread/${threadId}/${voteType}`, {
                     method: 'POST',
@@ -149,16 +151,78 @@
                     // Update the displayed counts
                     document.getElementById(`upvotes_${threadId}`).textContent = data.upvotes;
                     document.getElementById(`downvotes_${threadId}`).textContent = data.downvotes;
+
+                    // Toggle vote status and active class
+                    const commentUpvoteButton = document.querySelector(`.upvote-button[data-id="${threadId}"]`);
+                    const commentDownvoteButton = document.querySelector(`.downvote-button[data-id="${threadId}"]`);
+
+                    // ... (Rest of the code for toggling active class)
+                    if (voteType === 'upvote') {
+                        if (commentUpvoteButton.classList.contains('active')) {
+                            commentUpvoteButton.classList.remove('active');
+                            sessionStorage.removeItem(`active_${threadId}`);
+                            voteType = 'unvote';
+                        } else {
+                            commentUpvoteButton.classList.add('active');
+                            commentDownvoteButton.classList.remove('active');
+                            sessionStorage.setItem(`active_${threadId}`, 'upvote');
+                        }
+                    } else if (voteType === 'downvote') {
+                        if (commentDownvoteButton.classList.contains('active')) {
+                            commentDownvoteButton.classList.remove('active');
+                            sessionStorage.removeItem(`active_${threadId}`);
+                            voteType = 'unvote';
+                        } else {
+                            commentDownvoteButton.classList.add('active');
+                            commentUpvoteButton.classList.remove('active');
+                            sessionStorage.setItem(`active_${threadId}`, 'downvote');
+                        }
+                    }
+                    // Manage session storage
+                    if (voteType === 'unvote') {
+                        // User unvoted, remove the session value
+                        sessionStorage.removeItem(`active_${threadId}`);
+                        fetch(`/thread/${threadId}/unvote`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json',
+                            },
+                        });
+                    } else {
+                        // Set session storage for active state
+                        sessionStorage.setItem(`active_${threadId}`, voteType);
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         }
 
+        function applyInitialActiveState() {
+            upvoteButtons.forEach(button => {
+                const threadId = button.getAttribute('data-id');
+                const activeState = sessionStorage.getItem(`active_${threadId}`);
+                if (activeState === 'upvote') {
+                    button.classList.add('active');
+                }
+            });
+
+            downvoteButtons.forEach(button => {
+                const threadId = button.getAttribute('data-id');
+                const activeState = sessionStorage.getItem(`active_${threadId}`);
+                if (activeState === 'downvote') {
+                    button.classList.add('active');
+                }
+            });
+        }
+
+
         // Handle comment upvote and downvote button clicks
         const commentUpvoteButtons = document.querySelectorAll('.comment-upvote-button');
         const commentDownvoteButtons = document.querySelectorAll('.comment-downvote-button');
 
+        // Handle upvote button clicks
         commentUpvoteButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const commentId = this.getAttribute('data-comment-id');
@@ -166,6 +230,7 @@
             });
         });
 
+        // Handle downvote button clicks
         commentDownvoteButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const commentId = this.getAttribute('data-comment-id');
@@ -173,6 +238,7 @@
             });
         });
 
+        applyCInitialActiveState();
 
         // Function to handle comment voting
         function voteComment(commentId, voteType) {
@@ -185,13 +251,75 @@
                 })
                 .then(response => response.json())
                 .then(data => {
+                    // Update displayed counts
                     document.getElementById(`c-upvotes_${commentId}`).textContent = data.upvotes;
                     document.getElementById(`c-downvotes_${commentId}`).textContent = data.downvotes;
+
+                    // Toggle vote status and active class
+                    const commentUpvoteButton = document.querySelector(`.comment-upvote-button[data-comment-id="${commentId}"]`);
+                    const commentDownvoteButton = document.querySelector(`.comment-downvote-button[data-comment-id="${commentId}"]`);
+
+                    if (voteType === 'upvote') {
+                        if (commentUpvoteButton.classList.contains('active')) {
+                            commentUpvoteButton.classList.remove('active');
+                            sessionStorage.removeItem(`active_${commentId}`);
+                            voteType = 'unvote';
+                        } else {
+                            commentUpvoteButton.classList.add('active');
+                            commentDownvoteButton.classList.remove('active');
+                            sessionStorage.setItem(`active_${commentId}`, 'upvote');
+                        }
+                    } else if (voteType === 'downvote') {
+                        if (commentDownvoteButton.classList.contains('active')) {
+                            commentDownvoteButton.classList.remove('active');
+                            sessionStorage.removeItem(`active_${commentId}`);
+                            voteType = 'unvote';
+                        } else {
+                            commentDownvoteButton.classList.add('active');
+                            commentUpvoteButton.classList.remove('active');
+                            sessionStorage.setItem(`active_${commentId}`, 'downvote');
+                        }
+                    }
+
+                    // Manage session storage
+                    if (voteType === 'unvote') {
+                        // User unvoted, remove the session value
+                        sessionStorage.removeItem(`active_${commentId}`);
+                        fetch(`/comment/${commentId}/unvote`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json',
+                            },
+                        });
+                    } else {
+                        // Set session storage for active state
+                        sessionStorage.setItem(`active_${commentId}`, voteType);
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         }
+
+        function applyCInitialActiveState() {
+            commentUpvoteButtons.forEach(button => {
+                const commentId = button.getAttribute('data-comment-id');
+                const activeState = sessionStorage.getItem(`active_${commentId}`);
+                if (activeState === 'upvote') {
+                    button.classList.add('active');
+                }
+            });
+
+            commentDownvoteButtons.forEach(button => {
+                const commentId = button.getAttribute('data-comment-id');
+                const activeState = sessionStorage.getItem(`active_${commentId}`);
+                if (activeState === 'downvote') {
+                    button.classList.add('active');
+                }
+            });
+        }
     });
 </script>
+
 @endsection

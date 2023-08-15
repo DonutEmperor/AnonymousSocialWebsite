@@ -156,6 +156,8 @@
             });
         });
 
+        // Apply initial active state during page load
+        applyInitialActiveState();
 
         function voteThread(threadId, voteType) {
             fetch(`/thread/${threadId}/${voteType}`, {
@@ -174,28 +176,34 @@
                     // Toggle vote status and active class
                     const upvoteButton = document.querySelector(`.upvote-button[data-id="${threadId}"]`);
                     const downvoteButton = document.querySelector(`.downvote-button[data-id="${threadId}"]`);
+
+                    // ... (Rest of the code for toggling active class)
                     if (voteType === 'upvote') {
                         if (upvoteButton.classList.contains('active')) {
                             upvoteButton.classList.remove('active');
+                            sessionStorage.removeItem(`active_${threadId}`);
                             voteType = 'unvote';
                         } else {
                             upvoteButton.classList.add('active');
                             downvoteButton.classList.remove('active');
+                            sessionStorage.setItem(`active_${threadId}`, 'upvote');
                         }
                     } else if (voteType === 'downvote') {
                         if (downvoteButton.classList.contains('active')) {
                             downvoteButton.classList.remove('active');
+                            sessionStorage.removeItem(`active_${threadId}`);
                             voteType = 'unvote';
                         } else {
                             downvoteButton.classList.add('active');
                             upvoteButton.classList.remove('active');
+                            sessionStorage.setItem(`active_${threadId}`, 'downvote');
                         }
                     }
 
+                    // Manage session storage
                     if (voteType === 'unvote') {
-                        // User unvoted, remove the session value and set cookie
-                        Cookies.remove(`vote_${threadId}`);
-                        Cookies.remove(`active_${threadId}`);
+                        // User unvoted, remove the session value
+                        sessionStorage.removeItem(`active_${threadId}`);
                         fetch(`/thread/${threadId}/unvote`, {
                             method: 'POST',
                             headers: {
@@ -204,16 +212,32 @@
                             },
                         });
                     } else {
-                        // Set cookie for the vote and active state
-                        Cookies.set(`vote_${threadId}`, voteType);
-                        Cookies.set(`active_${threadId}`, voteType);
+                        // Set session storage for active state
+                        sessionStorage.setItem(`active_${threadId}`, voteType);
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         }
+
+        function applyInitialActiveState() {
+            upvoteButtons.forEach(button => {
+                const threadId = button.getAttribute('data-id');
+                const activeState = sessionStorage.getItem(`active_${threadId}`);
+                if (activeState === 'upvote') {
+                    button.classList.add('active');
+                }
+            });
+
+            downvoteButtons.forEach(button => {
+                const threadId = button.getAttribute('data-id');
+                const activeState = sessionStorage.getItem(`active_${threadId}`);
+                if (activeState === 'downvote') {
+                    button.classList.add('active');
+                }
+            });
+        }
     });
 </script>
-<script></script>
 @endsection

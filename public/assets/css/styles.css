@@ -3,10 +3,44 @@
     margin: 0;
 }
 
+/* body{
+    background-color: #222;
+} */
+
 .upvote-button.active {
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.7); /* Change color and intensity as desired */
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.7); /* Change color and intensity as desired */
 }
 
 .downvote-button.active{
-    box-shadow: 0 0 10px rgba(255, 0, 0, 0.7); /* Change color and intensity as desired */
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.7); /* Change color and intensity as desired */
 }
+
+.comment-upvote-button.active{
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.7);
+}
+
+.comment-downvote-button.active{
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.7)
+}
+
+/* Apply custom styles to the scrollbar */
+::-webkit-scrollbar {
+    width: 5px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Background color of the track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #aaaeb2; /* Color of the thumb (the draggable part of the scrollbar) */
+    border-radius:5px; /* Rounded corners for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: grey; /* Color of the thumb on hover */
+}
+
+/* For Firefox */
+/* scrollbar-color: #888 #f1f1f1;
+scrollbar-width: thin; */

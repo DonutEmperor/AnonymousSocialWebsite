@@ -13,8 +13,8 @@
     }
 </style>
 
-<div class="footer">
-    <footer class="position-fixed fixed-bottom bg-white">
+<div class="footer ">
+    <footer class="position-fixed fixed-bottom bg-light">
         <!-- Add your footer content here -->
         © Copyright 2023 CHAD PALACE
         <br>

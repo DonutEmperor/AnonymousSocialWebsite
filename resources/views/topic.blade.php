@@ -142,7 +142,7 @@
 </script>
 
 <!-- handle votes clicks -->
-<script>
+<!-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Handle upvote button clicks
         const upvoteButtons = document.querySelectorAll('.upvote-button');
@@ -179,6 +179,110 @@
                 .catch(error => {
                     console.error('Error:', error);
                 });
+        }
+    });
+</script> -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle upvote button clicks
+        const upvoteButtons = document.querySelectorAll('.upvote-button');
+        upvoteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const threadId = this.getAttribute('data-id');
+                voteThread(threadId, 'upvote');
+            });
+        });
+
+        // Handle downvote button clicks
+        const downvoteButtons = document.querySelectorAll('.downvote-button');
+        downvoteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const threadId = this.getAttribute('data-id');
+                voteThread(threadId, 'downvote');
+            });
+        });
+
+        // Apply initial active state during page load
+        applyInitialActiveState();
+
+        function voteThread(threadId, voteType) {
+            fetch(`/thread/${threadId}/${voteType}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the displayed counts
+                    document.getElementById(`upvotes_${threadId}`).textContent = data.upvotes;
+                    document.getElementById(`downvotes_${threadId}`).textContent = data.downvotes;
+
+                    // Toggle vote status and active class
+                    const upvoteButton = document.querySelector(`.upvote-button[data-id="${threadId}"]`);
+                    const downvoteButton = document.querySelector(`.downvote-button[data-id="${threadId}"]`);
+
+                    // ... (Rest of the code for toggling active class)
+                    if (voteType === 'upvote') {
+                        if (upvoteButton.classList.contains('active')) {
+                            upvoteButton.classList.remove('active');
+                            sessionStorage.removeItem(`active_${threadId}`);
+                            voteType = 'unvote';
+                        } else {
+                            upvoteButton.classList.add('active');
+                            downvoteButton.classList.remove('active');
+                            sessionStorage.setItem(`active_${threadId}`, 'upvote');
+                        }
+                    } else if (voteType === 'downvote') {
+                        if (downvoteButton.classList.contains('active')) {
+                            downvoteButton.classList.remove('active');
+                            sessionStorage.removeItem(`active_${threadId}`);
+                            voteType = 'unvote';
+                        } else {
+                            downvoteButton.classList.add('active');
+                            upvoteButton.classList.remove('active');
+                            sessionStorage.setItem(`active_${threadId}`, 'downvote');
+                        }
+                    }
+
+                    // Manage session storage
+                    if (voteType === 'unvote') {
+                        // User unvoted, remove the session value
+                        sessionStorage.removeItem(`active_${threadId}`);
+                        fetch(`/thread/${threadId}/unvote`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json',
+                            },
+                        });
+                    } else {
+                        // Set session storage for active state
+                        sessionStorage.setItem(`active_${threadId}`, voteType);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function applyInitialActiveState() {
+            upvoteButtons.forEach(button => {
+                const threadId = button.getAttribute('data-id');
+                const activeState = sessionStorage.getItem(`active_${threadId}`);
+                if (activeState === 'upvote') {
+                    button.classList.add('active');
+                }
+            });
+
+            downvoteButtons.forEach(button => {
+                const threadId = button.getAttribute('data-id');
+                const activeState = sessionStorage.getItem(`active_${threadId}`);
+                if (activeState === 'downvote') {
+                    button.classList.add('active');
+                }
+            });
         }
     });
 </script>

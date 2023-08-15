@@ -6,7 +6,7 @@
 <style>
     body {
         background-image: none;
-        background-color: #212529;
+        background-color: #F8F9FA;
     }
 
     .disclaimerpage {

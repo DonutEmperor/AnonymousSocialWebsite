@@ -6,9 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Topic;
 use App\Models\Thread;
 use App\Models\Comment;
-use PDO;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Database\QueryException;
 
 
@@ -59,7 +57,7 @@ class ThreadController extends Controller
     {
         $thread = Thread::findOrFail($id);
 
-        $previousVote = Cookie::get('vote_' . $thread->id);
+        $previousVote = session('vote_' . $thread->id);
 
         if (!$previousVote || $previousVote === 'downvote') {
             $thread->upvotes++;
@@ -69,16 +67,15 @@ class ThreadController extends Controller
 
             $thread->save();
 
-            Cookie::queue('vote_' . $thread->id, 'upvote');
-            Cookie::queue('active_' . $thread->id, 'upvote');
+            session(['vote_' . $thread->id => 'upvote']);
+            session(['active_' . $thread->id => 'upvote']);
         } else {
             // Unvote logic here if the user clicks the same button
-            // Unvote logic
             $thread->upvotes--; // Decrement upvotes
             $thread->save();
 
-            Cookie::queue('vote_' . $thread->id, null); // Remove vote cookie
-            Cookie::queue('active_' . $thread->id, null); // Remove active cookie
+            session()->forget('vote_' . $thread->id); // Remove vote session data
+            session()->forget('active_' . $thread->id); // Remove active session data
         }
 
         return response()->json([
@@ -91,7 +88,7 @@ class ThreadController extends Controller
     {
         $thread = Thread::findOrFail($id);
 
-        $previousVote = Cookie::get('vote_' . $thread->id);
+        $previousVote = session('vote_' . $thread->id);
 
         if (!$previousVote || $previousVote === 'upvote') {
             $thread->downvotes++;
@@ -101,16 +98,15 @@ class ThreadController extends Controller
 
             $thread->save();
 
-            Cookie::queue('vote_' . $thread->id, 'downvote');
-            Cookie::queue('active_' . $thread->id, 'downvote');
+            session(['vote_' . $thread->id => 'downvote']);
+            session(['active_' . $thread->id => 'downvote']);
         } else {
             // Unvote logic here if the user clicks the same button
-            // Unvote logic
-            $thread->downvotes--; // Decrement upvotes
+            $thread->downvotes--; // Decrement downvotes
             $thread->save();
 
-            Cookie::queue('vote_' . $thread->id, null); // Remove vote cookie
-            Cookie::queue('active_' . $thread->id, null); // Remove active cookie
+            session()->forget('vote_' . $thread->id); // Remove vote session data
+            session()->forget('active_' . $thread->id); // Remove active session data
         }
 
         return response()->json([
@@ -118,30 +114,31 @@ class ThreadController extends Controller
             'downvotes' => $thread->downvotes,
         ]);
     }
+
 
     //Actually useless -> schedule to remove in the near future 
-    public function unvote(Request $request, $id)
-    {
-        $thread = Thread::findOrFail($id);
+    // public function unvote(Request $request, $id)
+    // {
+    //     $thread = Thread::findOrFail($id);
 
-        $previousVote = Cookie::get('vote_' . $id);
+    //     $previousVote = Cookie::get('vote_' . $id);
 
-        if ($previousVote === 'upvote') {
-            $thread->upvotes--;
-        } elseif ($previousVote === 'downvote') {
-            $thread->downvotes--;
-        }
+    //     if ($previousVote === 'upvote') {
+    //         $thread->upvotes--;
+    //     } elseif ($previousVote === 'downvote') {
+    //         $thread->downvotes--;
+    //     }
 
-        $thread->save();
+    //     $thread->save();
 
-        Cookie::queue('vote_' . $id, null, -1); // Delete the cookie
-        Cookie::queue('active_' . $id, null, -1); // Delete the cookie
+    //     Cookie::queue('vote_' . $id, null, -1); // Delete the cookie
+    //     Cookie::queue('active_' . $id, null, -1); // Delete the cookie
 
-        return response()->json([
-            'upvotes' => $thread->upvotes,
-            'downvotes' => $thread->downvotes,
-        ]);
-    }
+    //     return response()->json([
+    //         'upvotes' => $thread->upvotes,
+    //         'downvotes' => $thread->downvotes,
+    //     ]);
+    // }
 
     public function createComment(Request $request)
     {
@@ -169,7 +166,7 @@ class ThreadController extends Controller
     {
         $comment = Comment::findOrFail($id);
 
-        $previousVote = Cookie::get('comment_vote_' . $comment->id);
+        $previousVote = Session::get('comment_vote_' . $comment->id);
 
         if (!$previousVote || $previousVote === 'downvote') {
             $comment->upvotes++;
@@ -179,15 +176,15 @@ class ThreadController extends Controller
 
             $comment->save();
 
-            Cookie::queue('comment_vote_' . $comment->id, 'upvote');
-            Cookie::queue('comment_active_' . $comment->id, 'upvote');
+            Session::put('comment_vote_' . $comment->id, 'upvote');
+            Session::put('comment_active_' . $comment->id, 'upvote');
         } else {
             // Unvote logic here if the user clicks the same button
             $comment->upvotes--; // Decrement upvotes
             $comment->save();
 
-            Cookie::queue('comment_vote_' . $comment->id, null); // Remove vote cookie
-            Cookie::queue('comment_active_' . $comment->id, null); // Remove active cookie
+            Session::forget('comment_vote_' . $comment->id); // Remove vote session
+            Session::forget('comment_active_' . $comment->id); // Remove active session
         }
 
         return response()->json([
@@ -200,7 +197,7 @@ class ThreadController extends Controller
     {
         $comment = Comment::findOrFail($id);
 
-        $previousVote = Cookie::get('comment_vote_' . $comment->id);
+        $previousVote = Session::get('comment_vote_' . $comment->id);
 
         if (!$previousVote || $previousVote === 'upvote') {
             $comment->downvotes++;
@@ -210,15 +207,15 @@ class ThreadController extends Controller
 
             $comment->save();
 
-            Cookie::queue('comment_vote_' . $comment->id, 'downvote');
-            Cookie::queue('comment_active_' . $comment->id, 'downvote');
+            Session::put('comment_vote_' . $comment->id, 'downvote');
+            Session::put('comment_active_' . $comment->id, 'downvote');
         } else {
             // Unvote logic here if the user clicks the same button
             $comment->downvotes--; // Decrement downvotes
             $comment->save();
 
-            Cookie::queue('comment_vote_' . $comment->id, null); // Remove vote cookie
-            Cookie::queue('comment_active_' . $comment->id, null); // Remove active cookie
+            Session::forget('comment_vote_' . $comment->id); // Remove vote session
+            Session::forget('comment_active_' . $comment->id); // Remove active session
         }
 
         return response()->json([
@@ -226,6 +223,7 @@ class ThreadController extends Controller
             'downvotes' => $comment->downvotes,
         ]);
     }
+
 
 
     // public function upvote(Request $request, $id)
