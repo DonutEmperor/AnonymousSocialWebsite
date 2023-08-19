@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\View\Components\navbar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Topic;
 use App\Models\Thread;
 
@@ -14,7 +15,11 @@ class HomeController extends Controller
     {
         $footer = "true";
 
-        $navbar = "without-options";
+        if (auth()->check()) {
+            $navbar = "mod-navbar"; // User is logged in
+        } else {
+            $navbar = "without-options"; // User is not logged in
+        }
 
         $allTopics = Topic::all();
 
@@ -30,7 +35,11 @@ class HomeController extends Controller
     {
         $footer = "true";
 
-        $navbar = "without-options";
+        if (auth()->check()) {
+            $navbar = "mod-navbar"; // User is logged in
+        } else {
+            $navbar = "without-options"; // User is not logged in
+        }
 
         return view('aboutus', compact('navbar', 'footer'));
     }
@@ -39,7 +48,11 @@ class HomeController extends Controller
     {
         $footer = "true";
 
-        $navbar = "without-options";
+        if (auth()->check()) {
+            $navbar = "mod-navbar"; // User is logged in
+        } else {
+            $navbar = "without-options"; // User is not logged in
+        }
 
         return view('privacypolicy', compact('navbar', 'footer'));
     }
@@ -48,7 +61,11 @@ class HomeController extends Controller
     {
         $footer = "true";
 
-        $navbar = "without-options";
+        if (auth()->check()) {
+            $navbar = "mod-navbar"; // User is logged in
+        } else {
+            $navbar = "without-options"; // User is not logged in
+        }
 
         return view('error404', compact('navbar', 'footer'));
     }

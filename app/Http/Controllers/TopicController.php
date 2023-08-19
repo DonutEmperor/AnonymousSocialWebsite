@@ -16,7 +16,11 @@ class TopicController extends Controller
 
         $footer = "true";
 
-        $navbar = "without-options";
+        if (auth()->check()) {
+            $navbar = "mod-navbar"; // User is logged in
+        } else {
+            $navbar = "without-options"; // User is not logged in
+        }
 
         $topics = Topic::where('id', $id)->get();
 
@@ -26,7 +30,11 @@ class TopicController extends Controller
 
         $threadID = Thread::where('topic_id', $id)->pluck('id');
 
-        return view('topic', compact('navbar', 'footer', 'topics', 'allTopics', 'allThreads'));
+        if ($topics->isEmpty()) {
+            return redirect()->route('not-found'); // Show a 404 error page
+        } else {
+            return view('topic', compact('navbar', 'footer', 'topics', 'allTopics', 'allThreads'));
+        }
     }
 
     public function viewTopicList()
@@ -34,7 +42,11 @@ class TopicController extends Controller
 
         $footer = "true";
 
-        $navbar = "without-options";
+        if (auth()->check()) {
+            $navbar = "mod-navbar"; // User is logged in
+        } else {
+            $navbar = "without-options"; // User is not logged in
+        }
 
         $topics = Topic::orderBy('title', 'asc')->get();
 

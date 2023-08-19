@@ -43,7 +43,10 @@
                                                 <input type="hidden" name="topic_id" id="topic_id_input">
                                                 <div class="mb-1">
                                                     <label for="thread-title" class="col-form-label">Title:</label>
-                                                    <input type="text" class="form-control" name="title" required data-validation-required-message="Please enter a title for your thread.">
+                                                    <input type="text" class="form-control" name="title" required data-validation-required-message="Please enter a title for your thread." maxlength="50">
+                                                    <div class="invalid-feedback">
+                                                        Title cannot exceed 50 characters.
+                                                    </div>
                                                 </div>
                                                 <div class="mb-2">
                                                     <label for="thread-content" class="col-form-label">Content:</label>

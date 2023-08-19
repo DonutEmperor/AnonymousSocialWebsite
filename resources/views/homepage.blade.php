@@ -17,10 +17,15 @@
             <div class="alert alert-warning">
                 {{session('logout-success')}}
             </div>
-
             @endif
+
+            @auth
+            <div class="alert alert-info" role="alert">
+                <h6 class="">Logged in as: {{ auth()->user()->username }} (Moderator)</h6>
+            </div>
+            @endauth
             <!-- Row with "What's this" and "Topics" -->
-            <div class="row mb-4">
+            <div class="row mb-4 mt-4">
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">

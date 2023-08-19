@@ -6,6 +6,7 @@ use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
+use Spatie\FlareClient\Http\Exceptions\NotFound;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +28,7 @@ Route::get('/', [LandingController::class, 'viewDisclaimerPage'])->name('disclai
 Route::get('/home', [HomeController::class, 'viewHomePage'])->name('home');
 Route::get('/about', [HomeController::class, 'viewAboutUs'])->name('about');
 Route::get('/privacypolicy', [HomeController::class, 'viewPolicyPage'])->name('policy');
-Route::get('/notFound', [HomeController::class, 'viewErrorPage']);
+Route::get('/notFound', [HomeController::class, 'viewErrorPage'])->name('not-found');
 
 Route::get('/topiclist', [TopicController::class, 'viewTopicList'])->name('topic-list');
 Route::get('/topic/{id}', [TopicController::class, 'viewTopicPage'])->name('topic');

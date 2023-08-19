@@ -6,7 +6,10 @@
         <!-- <h1><a class="navbar-brand" href="">CHAD PALACE</a></h1> -->
         <form class="form-inline">
             <div class="row">
-                <div class="col">
+                <div class="col-auto">
+                    <a class="btn btn-outline-primary" href="{{route('mod')}}">Mod Page</a>
+                </div>
+                <div class="col-auto">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                 </div>
                 <div class="col-auto">

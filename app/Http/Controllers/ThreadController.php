@@ -18,7 +18,11 @@ class ThreadController extends Controller
 
         $footer = "true";
 
-        $navbar = "without-options";
+        if (auth()->check()) {
+            $navbar = "mod-navbar"; // User is logged in
+        } else {
+            $navbar = "without-options"; // User is not logged in
+        }
 
         $allTopics = Topic::all();
 
@@ -27,6 +31,9 @@ class ThreadController extends Controller
         $comments = Comment::where('thread_id', $id)->orderBy('upvotes', 'desc')->get();
         $commentCount = $comments->count();
 
+        if ($threads->isEmpty()) {
+            return redirect()->route('not-found'); // Show a 404 error page
+        }
         // $threads = Thread::find($);
 
         return view('threadpage', compact('navbar', 'footer', 'threads', 'allTopics', 'comments', 'commentCount'));
