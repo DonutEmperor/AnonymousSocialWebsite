@@ -9,11 +9,55 @@
     <!-- This is where your content goes -->
     <div class="topiccontent">
         <div class="container">
-            <a href="{{ url()->previous() }}" class="btn btn-primary mb-4">Back</a>
+            <div class="d-flex justify-content-between">
+                <a href="{{ url()->previous() }}" class="btn btn-primary mb-4">Back</a>
+
+
+
+                <!-- This is the "update topic" modal -->
+                @foreach($topics as $topic)
+                @auth
+                <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#updateTopic">
+                    Update Topic
+                </button>
+                @endauth
+                <div class="modal fade" id="updateTopic" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateTopicLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="updateTopicLabel">Update topic</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <form action="#" method="POST">
+                                    @csrf
+                                    <div class="mb-1">
+                                        <label for="topic-title" class="col-form-label">Title:</label>
+                                        <input type="text" class="form-control" name="title" required data-validation-required-message="Please enter a title for your topic." maxlength="20" value="{{ old('title') }}">
+                                        <div class="invalid-feedback">
+                                            Title cannot exceed 20 characters.
+                                        </div>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="topic-description" class="col-form-label">Description:</label>
+                                        <textarea class="form-control" name="description" style="height: 300px" required data-validation-required-message="Please enter a description for your topic.">{{ old('description') }}</textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Update Topic</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row mb-4">
                 <div class="col-md-8">
                     <div class="card">
-                        @foreach($topics as $topic)
+
                         <div class="card-header">
                             <h2 class="card-title"> {{$topic->title}} </h2>
                             <h6>Topic ID: {{$topic->id}}</h6>
@@ -23,12 +67,12 @@
                             <p class="mt-3">
                                 {{$topic->description}}
                             </p>
-
+                            @endforeach
                             <!-- This is the "create thread" modal -->
                             <button type="button" class="btn btn-primary mb-0 mt-3" data-bs-toggle="modal" data-bs-target="#createThread" data-topic-id="{{ $topic->id }}">
                                 Create New Thread
                             </button>
-                            @endforeach
+
                             <div class="modal fade" id="createThread" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createThreadLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">

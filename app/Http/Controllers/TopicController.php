@@ -52,4 +52,19 @@ class TopicController extends Controller
 
         return view('topic-list', compact('navbar', 'footer', 'topics'));
     }
+
+    public function createNewTopic(Request $req)
+    {
+        $req->validate([
+            'title' => 'required|string|max:20|unique:topics', // Max 20 characters, unique in the topics table
+            'description' => 'required|string',
+        ]);
+
+        $topic = new Topic();
+        $topic->title = $req->input('title');
+        $topic->description = $req->input('description');
+        $topic->save();
+
+        return redirect()->route('topic-list')->with('success_topic', 'Topic created successfully.');
+    }
 }
