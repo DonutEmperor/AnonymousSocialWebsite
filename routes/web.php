@@ -33,6 +33,9 @@ Route::get('/notFound', [HomeController::class, 'viewErrorPage'])->name('not-fou
 Route::get('/topiclist', [TopicController::class, 'viewTopicList'])->name('topic-list');
 Route::get('/topic/{id}', [TopicController::class, 'viewTopicPage'])->name('topic');
 Route::post('/topic/create', [TopicController::class, 'createNewTopic'])->name('topic.create');
+Route::put('/topic/{id}/update', [TopicController::class, 'updateTopic'])->name('topic.update');
+Route::delete('/topic/{id}/delete', [TopicController::class, 'deleteTopic'])->name('topic.delete');
+
 
 Route::get('/thread/{id}', [ThreadController::class, 'viewThreadPage'])->name('thread');
 Route::post('/thread', [ThreadController::class, 'createNewThread'])->name('thread.create');

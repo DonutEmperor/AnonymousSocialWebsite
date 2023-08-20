@@ -10,15 +10,17 @@
     <div class="topiccontent">
         <div class="container">
             <div class="d-flex justify-content-between">
-                <a href="{{ url()->previous() }}" class="btn btn-primary mb-4">Back</a>
-
-
-
+                <a href="{{ url()->previous() }}" class="btn btn-primary mb-5">Back</a>
+                @if(session('success_topic'))
+                <div class="alert alert-success mb-4">
+                    {{ session('success_topic') }}
+                </div>
+                @endif
                 <!-- This is the "update topic" modal -->
                 @foreach($topics as $topic)
                 @auth
-                <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#updateTopic">
-                    Update Topic
+                <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#updateTopic">
+                    Edit Topic
                 </button>
                 @endauth
                 <div class="modal fade" id="updateTopic" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateTopicLabel" aria-hidden="true">
@@ -30,18 +32,20 @@
                             </div>
 
                             <div class="modal-body">
-                                <form action="#" method="POST">
+                                <form action="{{route('topic.update', ['id' =>$topic->id])}}" method="POST">
                                     @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="topic_id" value="{{ $topic->id }}">
                                     <div class="mb-1">
                                         <label for="topic-title" class="col-form-label">Title:</label>
-                                        <input type="text" class="form-control" name="title" required data-validation-required-message="Please enter a title for your topic." maxlength="20" value="{{ old('title') }}">
+                                        <input type="text" class="form-control" name="title" placeholder="{{$topic->title}}" required data-validation-required-message="Please enter a title for your topic." maxlength="20" value="{{ old('title') }}">
                                         <div class="invalid-feedback">
                                             Title cannot exceed 20 characters.
                                         </div>
                                     </div>
                                     <div class="mb-2">
                                         <label for="topic-description" class="col-form-label">Description:</label>
-                                        <textarea class="form-control" name="description" style="height: 300px" required data-validation-required-message="Please enter a description for your topic.">{{ old('description') }}</textarea>
+                                        <textarea class="form-control" name="description" placeholder="{{$topic->description}}" style="height: 300px" required data-validation-required-message="Please enter a description for your topic.">{{ old('description') }}</textarea>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary">Update Topic</button>
@@ -52,12 +56,14 @@
                         </div>
                     </div>
                 </div>
+                @endforeach
             </div>
 
+            <!-- Topic Card Header -->
             <div class="row mb-4">
                 <div class="col-md-8">
                     <div class="card">
-
+                        @foreach($topics as $topic)
                         <div class="card-header">
                             <h2 class="card-title"> {{$topic->title}} </h2>
                             <h6>Topic ID: {{$topic->id}}</h6>
@@ -109,6 +115,7 @@
                     </div>
                 </div>
 
+                <!-- Display the topic box at side -->
                 <div class="col-md-4 text-md-right">
                     <x-topic-box :topics="$allTopics" />
                 </div>

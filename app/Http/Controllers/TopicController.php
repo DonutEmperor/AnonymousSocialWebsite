@@ -67,4 +67,19 @@ class TopicController extends Controller
 
         return redirect()->route('topic-list')->with('success_topic', 'Topic created successfully.');
     }
+
+    public function updateTopic(Request $req, $id)
+    {
+        $req->validate([
+            'title' => 'required|string|max:20|unique:topics,title,' . $id, // Max 20 characters, unique in the topics table, except for the current topic
+            'description' => 'required|string',
+        ]);
+
+        $topic = Topic::findOrFail($id);
+        $topic->title = $req->input('title');
+        $topic->description = $req->input('description');
+        $topic->save();
+
+        return redirect()->route('topic', ['id' => $id])->with('success_topic', 'Topic updated successfully.');
+    }
 }
