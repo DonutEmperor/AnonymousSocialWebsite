@@ -15,6 +15,10 @@
                 <div class="alert alert-success mb-4">
                     {{ session('success_topic') }}
                 </div>
+                @elseif(session('thread-delete-success'))
+                <div class="alert alert-danger">
+                    {{ session('thread-delete-success')}}
+                </div>
                 @endif
                 <!-- This is the "update topic" modal -->
                 @foreach($topics as $topic)
@@ -67,6 +71,42 @@
                         <div class="card-header">
                             <h2 class="card-title"> {{$topic->title}} </h2>
                             <h6>Topic ID: {{$topic->id}}</h6>
+                            @foreach($topics as $topic)
+                            <!-- Topic details display here -->
+
+                            @auth
+                            <!-- Delete Topic Button -->
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDelete{{ $topic->id }}">
+                                Delete Topic
+                            </button>
+
+                            <!-- Confirmation Modal -->
+                            <div class="modal fade" id="confirmDelete{{ $topic->id }}" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="confirmDeleteLabel">Confirm Deletion</h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete this topic?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form action="{{ route('topic.delete', ['id' => $topic->id]) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endauth
+                            @endforeach
+
                         </div>
                         <div class="card-body">
 

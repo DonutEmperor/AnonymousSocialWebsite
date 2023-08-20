@@ -39,6 +39,8 @@ Route::delete('/topic/{id}/delete', [TopicController::class, 'deleteTopic'])->na
 
 Route::get('/thread/{id}', [ThreadController::class, 'viewThreadPage'])->name('thread');
 Route::post('/thread', [ThreadController::class, 'createNewThread'])->name('thread.create');
+Route::put('/thread/{id}/update', [ThreadController::class, 'updateThread'])->name('thread.update');
+Route::delete('/thread/{id}/delete', [ThreadController::class, 'deleteThread'])->name('thread.delete');
 
 Route::post('/thread/{id}/upvote', [ThreadController::class, 'upvote'])->name('thread.upvote');
 Route::post('/thread/{id}/downvote', [ThreadController::class, 'downvote'])->name('thread.downvote');

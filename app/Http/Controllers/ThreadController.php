@@ -8,7 +8,7 @@ use App\Models\Thread;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Database\QueryException;
-
+use Exception;
 
 class ThreadController extends Controller
 {
@@ -57,6 +57,33 @@ class ThreadController extends Controller
             }
 
             // Handle other query exceptions if needed
+        }
+    }
+
+    public function updateThread(Request $req, $id)
+    {
+        $req->validate([
+            'title' => 'required|string|max:50|unique:threads,title,' . $id, // Max 20 characters, unique in the threads table, except for the current thread
+            'content' => 'required|string',
+        ]);
+
+        $thread = Thread::findOrFail($id);
+        $thread->title = $req->input('title');
+        $thread->content = $req->input('content');
+        $thread->save();
+
+        return redirect()->route('thread', ['id' => $id])->with('success_thread', 'Thread updated successfully.');
+    }
+
+    public function deleteThread($id)
+    {
+        try {
+            $thread = Thread::findOrFail($id);
+            $thread->delete();
+
+            return redirect()->route('topic', ['id' => $thread->topic_id])->with('thread-delete-success', 'Thread deleted successfully');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['thread-deletion' => 'Error deleting thread.']);
         }
     }
 

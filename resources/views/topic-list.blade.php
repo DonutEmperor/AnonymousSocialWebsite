@@ -18,6 +18,10 @@
             <div class="alert alert-danger">
                 {{ $errors->first('title') }}
             </div>
+            @elseif(session('topic-delete-success'))
+            <div class="alert alert-danger">
+                {{ session('topic-delete-success')}}
+            </div>
             @endif
             <!-- This is the "create topic" modal -->
             @auth

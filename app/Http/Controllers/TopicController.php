@@ -7,6 +7,7 @@ use App\Models\Board;
 use App\Models\Topic;
 use App\Models\Thread;
 use App\Models\Comment;
+use Exception;
 
 class TopicController extends Controller
 {
@@ -81,5 +82,17 @@ class TopicController extends Controller
         $topic->save();
 
         return redirect()->route('topic', ['id' => $id])->with('success_topic', 'Topic updated successfully.');
+    }
+
+    public function deleteTopic($id)
+    {
+        try {
+            $topic = Topic::findOrFail($id);
+            $topic->delete();
+
+            return redirect()->route('topic-list')->with('topic-delete-success', 'Topic deleted successfully');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['topic-deletion' => 'Error deleting topic.']);
+        }
     }
 }

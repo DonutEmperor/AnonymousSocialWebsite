@@ -8,8 +8,58 @@
 <div class="thread">
     <!-- This is where your content goes -->
     <div class="container">
-        <a href="{{ url()->previous() }}" class="btn btn-primary mb-4">Back</a>
-        <div class="row mb-4">
+        <div class="d-flex justify-content-between">
+            <a href="{{ url()->previous() }}" class="btn btn-primary mb-5">Back</a>
+            @if(session('success_thread'))
+            <div class="alert alert-success mb-5 px-2 py-2">
+                {{ session('success_thread') }}
+            </div>
+            @endif
+            <!-- This is the "update thread" modal -->
+            @foreach($threads as $thread)
+            @auth
+            <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#updateThread">
+                Edit Thread
+            </button>
+            @endauth
+            <div class="modal fade" id="updateThread" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateThreadLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="updateThreadLabel">Update thread</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form action="{{route('thread.update', ['id' =>$thread->id])}}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" name="thread_id" value="{{ $thread->id }}">
+                                <div class="mb-1">
+                                    <label for="thread-title" class="col-form-label">Title:</label>
+                                    <input type="text" class="form-control" name="title" placeholder="{{$thread->title}}" required data-validation-required-message="Please enter a title for your thread." maxlength="50" value="{{ old('title') }}">
+                                    <div class="invalid-feedback">
+                                        Title cannot exceed 50 characters.
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="thread-content" class="col-form-label">Content:</label>
+                                    <textarea class="form-control" name="content" placeholder="{{$thread->content}}" style="height: 300px" required data-validation-required-message="Please enter a content for your thread.">{{ old('content') }}</textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Update thread</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+
+
+        <div class="row mb-0">
             <div class="col-md-9">
                 <div class="card">
                     <div class="card-body">
@@ -28,6 +78,37 @@
                                     <button class="btn btn-sm btn-success upvote-button" data-id="{{$thread->id}}">^</button>
                                     <button class="btn btn-sm btn-danger downvote-button" data-id="{{$thread->id}}">v</button>
                                     <a class="btn btn-sm btn-warning">Report</a>
+                                    @auth
+                                    <!-- Delete Thread Button -->
+                                    <button type="button" class="btn btn-danger py-1 px-1" data-bs-toggle="modal" data-bs-target="#confirmDelete{{ $thread->id }}">
+                                        Delete Thread
+                                    </button>
+
+                                    <!-- Confirmation Modal -->
+                                    <div class="modal fade" id="confirmDelete{{ $thread->id }}" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="confirmDeleteLabel">Confirm Deletion</h5>
+                                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete this thread?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form action="{{ route('thread.delete', ['id' => $thread->id]) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endauth
                                 </div>
                                 @endforeach
                             </div>
