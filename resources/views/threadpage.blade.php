@@ -58,7 +58,7 @@
             @endforeach
         </div>
 
-
+        <!-- Display thread card -->
         <div class="row mb-0">
             <div class="col-md-9">
                 <div class="card">
@@ -123,10 +123,11 @@
             </div>
         </div>
 
+        <!-- Comment Section  -->
         <div>
             <h6 class="text-decoration-underline">Comments({{$commentCount}})</h6>
         </div>
-
+        <!-- Create Comment Form -->
         <div class="card col-8">
             <div class="card-body">
                 <div class="media">
@@ -151,12 +152,22 @@
             </div>
         </div>
 
+        <!-- Comment success and error session display -->
         @if(session('success_comment'))
-        <div class="alert alert-success mt-3">
+        <div class="alert alert-success mt-3 col-8">
             {{ session('success_comment') }}
+        </div>
+        @elseif(session('comment-delete-success'))
+        <div class="alert alert-success mt-3 col-8">
+            {{ session('comment-delete-success') }}
+        </div>
+        @elseif ($errors->has('comment-deletion'))
+        <div class="alert alert-danger">
+            {{ $errors->first('comment-deletion') }}
         </div>
         @endif
 
+        <!-- Display comments -->
         <div class="card col-8 mt-3">
             <div class="card-body">
                 <div class="media">
@@ -174,8 +185,72 @@
                         <!-- <p class="mb-3"> {{$comment->upvotes}} upvotes | {{$comment->downvotes}} downvotes | {{$comment->created_at}} </p> -->
                         <button class="btn btn-sm btn-success comment-upvote-button" data-comment-id="{{ $comment->id }}">^</button>
                         <button class="btn btn-sm btn-danger comment-downvote-button" data-comment-id="{{ $comment->id }}">v</button>
-
                         <a class="btn btn-sm btn-warning">Report</a>
+                        @auth
+                        <!-- This is the "update comment" modal -->
+                        <button type="button" class="btn btn-primary px-1 py-1" data-bs-toggle="modal" data-bs-target="#updateComment{{ $comment->id }}">
+                            Edit Comment
+                        </button>
+                        <div class="modal fade" id="updateComment{{ $comment->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateCommentLabel{{ $comment->id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="updateCommentLabel{{ $comment->id }}">Update comment</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <form action="{{ route('comment.update', ['id' => $comment->id]) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="mb-1">
+                                                <label for="comment-body" class="col-form-label">Body:</label>
+                                                <input type="text" class="form-control" name="body" placeholder="{{ $comment->body }}" required maxlength="255" value="{{ old('body') }}">
+                                                <div class="invalid-feedback">
+                                                    Body cannot exceed 255 characters.
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Update Comment</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endauth
+
+                        @auth
+                        <!-- Delete Comment Button -->
+                        <button type="button" class="btn btn-danger py-1 px-1" data-bs-toggle="modal" data-bs-target="#confirmDelete{{ $comment->id }}">
+                            Delete Comment
+                        </button>
+                        <!-- Confirmation Modal -->
+                        <div class="modal fade" id="confirmDelete{{ $comment->id }}" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabelComment" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="confirmDeleteLabelComment">Confirm Deletion</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete this comment?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="{{ route('comment.delete', ['id' => $comment->id]) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endauth
                     </div>
                     @endforeach
                     @else

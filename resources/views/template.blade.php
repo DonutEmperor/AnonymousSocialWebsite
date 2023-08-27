@@ -16,10 +16,8 @@
 
     <!-- css -->
     <link rel="stylesheet" href="/assets/css/styles.css">
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
-
-
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
     <!-- cdn - sweetalert
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
