@@ -37,14 +37,14 @@
                                 <input type="hidden" name="thread_id" value="{{ $thread->id }}">
                                 <div class="mb-1">
                                     <label for="thread-title" class="col-form-label">Title:</label>
-                                    <input type="text" class="form-control" name="title" placeholder="{{$thread->title}}" required data-validation-required-message="Please enter a title for your thread." maxlength="50" value="{{ old('title') }}">
+                                    <input type="text" class="form-control" name="title" required data-validation-required-message="Please enter a title for your thread." maxlength="50" value="{{ old('title' , $thread->title) }}">
                                     <div class="invalid-feedback">
                                         Title cannot exceed 50 characters.
                                     </div>
                                 </div>
                                 <div class="mb-2">
                                     <label for="thread-content" class="col-form-label">Content:</label>
-                                    <textarea class="form-control" name="content" placeholder="{{$thread->content}}" style="height: 300px" required data-validation-required-message="Please enter a content for your thread.">{{ old('content') }}</textarea>
+                                    <textarea class="form-control" name="content" style="height: 300px" required data-validation-required-message="Please enter a content for your thread.">{{ old('content', $thread->content) }}</textarea>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-primary">Update thread</button>
@@ -162,8 +162,12 @@
             {{ session('comment-delete-success') }}
         </div>
         @elseif ($errors->has('comment-deletion'))
-        <div class="alert alert-danger">
+        <div class="alert alert-danger mt-3 col-8">
             {{ $errors->first('comment-deletion') }}
+        </div>
+        @elseif(session('error') && session('error')['status'] === 429)
+        <div class="alert alert-danger mt-3 col-8">
+            {{ session('error')['message'] }}
         </div>
         @endif
 
@@ -205,7 +209,7 @@
                                             @method('PUT')
                                             <div class="mb-1">
                                                 <label for="comment-body" class="col-form-label">Body:</label>
-                                                <input type="text" class="form-control" name="body" placeholder="{{ $comment->body }}" required maxlength="255" value="{{ old('body') }}">
+                                                <textarea type="text" class="form-control" name="body" required maxlength="255">{{ old('body', $comment->body) }}</textarea>
                                                 <div class="invalid-feedback">
                                                     Body cannot exceed 255 characters.
                                                 </div>

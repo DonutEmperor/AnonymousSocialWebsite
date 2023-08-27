@@ -10,6 +10,9 @@
                     <a class="btn btn-outline-primary" href="{{route('mod')}}">Mod Page</a>
                 </div>
                 <div class="col-auto">
+                    <a class="btn btn-outline-primary" href="{{route('topic-list')}}">Topic List</a>
+                </div>
+                <div class="col-auto">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                 </div>
                 <div class="col-auto">

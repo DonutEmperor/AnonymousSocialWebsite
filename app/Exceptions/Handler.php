@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
+
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -33,6 +35,13 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof NotFoundHttpException) {
             return redirect()->route('not-found'); // Redirect to a custom error page or route
+        } elseif ($exception instanceof ThrottleRequestsException) {
+            return redirect()->back()->with([
+                'error' => [
+                    'message' => 'Rate limit exceeded. Please try again later.',
+                    'status' => 429, // You can use this status code in your view
+                ],
+            ]);
         }
 
         return parent::render($request, $exception);

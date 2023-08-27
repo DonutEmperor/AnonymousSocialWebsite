@@ -16,8 +16,12 @@
                     {{ session('success_topic') }}
                 </div>
                 @elseif(session('thread-delete-success'))
-                <div class="alert alert-danger">
+                <div class="alert alert-danger mb-4">
                     {{ session('thread-delete-success')}}
+                </div>
+                @elseif(session('error') && session('error')['status'] === 429)
+                <div class="alert alert-danger mb-4">
+                    {{ session('error')['message'] }}
                 </div>
                 @endif
                 <!-- This is the "update topic" modal -->
@@ -42,14 +46,14 @@
                                     <input type="hidden" name="topic_id" value="{{ $topic->id }}">
                                     <div class="mb-1">
                                         <label for="topic-title" class="col-form-label">Title:</label>
-                                        <input type="text" class="form-control" name="title" placeholder="{{$topic->title}}" required data-validation-required-message="Please enter a title for your topic." maxlength="20" value="{{ old('title') }}">
+                                        <input type="text" class="form-control" name="title" required data-validation-required-message="Please enter a title for your topic." maxlength="50" value="{{ old('title', $topic->title) }}">
                                         <div class="invalid-feedback">
                                             Title cannot exceed 20 characters.
                                         </div>
                                     </div>
                                     <div class="mb-2">
                                         <label for="topic-description" class="col-form-label">Description:</label>
-                                        <textarea class="form-control" name="description" placeholder="{{$topic->description}}" style="height: 300px" required data-validation-required-message="Please enter a description for your topic.">{{ old('description') }}</textarea>
+                                        <textarea class="form-control" name="description" style="height: 300px" required data-validation-required-message="Please enter a description for your topic.">{{ old('description', $topic->description) }}</textarea>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary">Update Topic</button>

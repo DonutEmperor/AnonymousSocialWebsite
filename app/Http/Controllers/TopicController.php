@@ -72,7 +72,7 @@ class TopicController extends Controller
     public function updateTopic(Request $req, $id)
     {
         $req->validate([
-            'title' => 'required|string|max:20|unique:topics,title,' . $id, // Max 20 characters, unique in the topics table, except for the current topic
+            'title' => 'required|string|max:50|unique:topics,title,' . $id, // Max 20 characters, unique in the topics table, except for the current topic
             'description' => 'required|string',
         ]);
 
