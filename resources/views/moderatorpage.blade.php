@@ -18,12 +18,11 @@
             <div class="card-header">
                 <h5>Report List</h5>
             </div>
-
             @if(session('login-success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success m-4">
             {{ session('login-success') }}
             </div>
-            @if(session('success_topic'))
+            @elseif(session('success_topic'))
             <div class="alert alert-success m-4">
                 {{ session('success_topic') }}
             </div>

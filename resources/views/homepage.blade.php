@@ -10,17 +10,17 @@
     <div class="homecontent">
         <div class="container">
             @if(session('access-error'))
-            <div class="alert alert-danger">
+            <div class="alert alert-danger m-4 d-flex justify-content-center">
                 {{ session('access-error') }}
             </div>
             @elseif(session('logout-success'))
-            <div class="alert alert-warning">
+            <div class="alert alert-warning m-4 d-flex justify-content-center">
                 {{session('logout-success')}}
             </div>
             @endif
 
             @auth
-            <div class="alert alert-info" role="alert">
+            <div class="alert alert-info m-4 d-flex justify-content-center" role="alert">
                 <h6 class="">Logged in as: {{ auth()->user()->username }} (Moderator)</h6>
             </div>
             @endauth
