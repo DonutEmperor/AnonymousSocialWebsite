@@ -8,11 +8,6 @@
 <div class="">
     <!-- This is where your content goes -->
     <div class="container ">
-        @if(session('login-success'))
-        <div class="alert alert-success">
-            {{ session('login-success') }}
-        </div>
-        @endif
 
         <div class="text-center mb-3">
             <h3>Mod Page</h4>
@@ -24,6 +19,10 @@
                 <h5>Report List</h5>
             </div>
 
+            @if(session('login-success'))
+            <div class="alert alert-success">
+            {{ session('login-success') }}
+            </div>
             @if(session('success_topic'))
             <div class="alert alert-success m-4">
                 {{ session('success_topic') }}
