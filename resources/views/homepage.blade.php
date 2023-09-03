@@ -10,17 +10,17 @@
     <div class="homecontent">
         <div class="container">
             @if(session('access-error'))
-            <div class="alert alert-danger m-4 d-flex justify-content-center">
+            <div class="alert alert-danger m-4 mt-0 d-flex justify-content-center">
                 {{ session('access-error') }}
             </div>
             @elseif(session('logout-success'))
-            <div class="alert alert-warning m-4 d-flex justify-content-center">
+            <div class="alert alert-warning m-4 mt-0 d-flex justify-content-center">
                 {{session('logout-success')}}
             </div>
             @endif
 
             @auth
-            <div class="alert alert-info m-4 d-flex justify-content-center" role="alert">
+            <div class="alert alert-info m-4 mt-0 d-flex justify-content-center" role="alert">
                 <h6 class="">Logged in as: {{ auth()->user()->username }} (Moderator)</h6>
             </div>
             @endauth
@@ -103,7 +103,7 @@
                     <br>
                     <br>
                     <div class="media-body">
-                        <h7 class="mt-0"><a href="#">News Title</a></h7>
+                        <h5 class="mt-0">BREAKING NEWS</h5>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel erat et odio bibendum euismod.

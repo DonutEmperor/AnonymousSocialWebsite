@@ -9,6 +9,7 @@ use App\Models\Comment;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Database\QueryException;
 use Exception;
+use Illuminate\Support\Facades\Hash;
 
 class ThreadController extends Controller
 {
@@ -46,6 +47,8 @@ class ThreadController extends Controller
             $thread->title = $req->input('title');
             $thread->content = $req->input('content');
             $thread->topic_id = $req->input('topic_id');
+            $userIP = $req->ip();
+            $thread-> creator_ip = $userIP;
 
             $thread->save();
 

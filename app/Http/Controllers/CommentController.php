@@ -9,6 +9,7 @@ use App\Models\Comment;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Database\QueryException;
 use Exception;
+use Illuminate\Support\Facades\Hash;
 
 class CommentController extends Controller
 {
@@ -25,8 +26,9 @@ class CommentController extends Controller
         $comment = new Comment();
         $comment->thread_id = $request->input('thread_id');
         $comment->body = $request->input('comments');
-        // You might want to set other attributes here, such as user_id, upvotes, etc.
-
+        $userIP = $request->ip();
+        $comment->creator_ip = $userIP;
+    
         $comment->save();
 
         // Redirect back or perform any other action

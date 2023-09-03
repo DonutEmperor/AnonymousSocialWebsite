@@ -10,7 +10,7 @@ class Comment extends Model
     use HasFactory;
 
     // public $timestamps = false;
-    protected $fillable = ['thread_id', 'body', 'upvotes', 'downvotes', 'report_count'];
+    protected $fillable = ['thread_id', 'body', 'upvotes', 'downvotes', 'report_count', 'creator_ip'];
 
     public function thread()
     {
