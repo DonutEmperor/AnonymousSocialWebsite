@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'rate_limit' => \App\Http\Middleware\RateLimitMiddleware::class,
         'checkDownvotes' => \App\Http\Middleware\CheckDownvoteMiddleware::class,
         'blockIp' => \App\Http\Middleware\BlockIPMiddleware::class,
+        "blockedIp" => \App\Http\Middleware\BlockedPageMiddleware::class,
     ];
 }

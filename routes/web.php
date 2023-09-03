@@ -80,5 +80,7 @@ Route::middleware('checkDownvotes')->group(function () {
 
     });
 });
+Route::middleware('blockedIp')->group(function () {
     //Blocked Page Route
     Route::get('/blocked', [BlockingController::class, 'viewBlockedPage'])->name('blocked');
+});
