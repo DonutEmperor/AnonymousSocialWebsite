@@ -64,7 +64,7 @@ Route::post('/login', [ModeratorController::class, 'login']);
 Route::get('/logout', [ModeratorController::class, 'logout'])->name('logout');
 
 //ONE TIME USE - GENERATE NEW MODERATOR Route
-// Route::get('/generateMod', [ModeratorController::class, 'createSingleUser'])->name('user.generate');
+Route::get('/generateMod', [ModeratorController::class, 'createSingleUser'])->name('user.generate');
 
 //Moderator Middleware
 Route::middleware('moderator')->group(function () {

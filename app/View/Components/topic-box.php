@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class topic-box extends Component
+class topicBox extends Component
 {
     /**
      * Create a new component instance.
