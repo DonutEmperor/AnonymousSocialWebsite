@@ -26,8 +26,7 @@ class CommentController extends Controller
         $comment = new Comment();
         $comment->thread_id = $request->input('thread_id');
         $comment->body = $request->input('comments');
-        $userIP = $request->ip();
-        $comment->creator_ip = $userIP;
+        $comment->creator_ip = encrypt($request->ip());
     
         $comment->save();
 

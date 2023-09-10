@@ -19,11 +19,11 @@ class CheckDownvoteMiddleware
     public function handle($request, Closure $next)
     {
         // Check downvotes for threads
-        $threads = Thread::where('downvotes', '>', 10)->get();
+        $threads = Thread::where('downvotes', '>', 50)->get();
         foreach ($threads as $thread) {
             // Check if the IP is already blocked
             $existingIp = BlockedIp::where('ip', $thread->creator_ip)->first();
-            
+
             // If IP doesn't exist in blocked_ips table, block it
             if (!$existingIp) {
                 BlockedIp::create(['ip' => $thread->creator_ip]);
@@ -31,11 +31,11 @@ class CheckDownvoteMiddleware
         }
 
         // Check downvotes for comments
-        $comments = Comment::where('downvotes', '>', 10)->get();
+        $comments = Comment::where('downvotes', '>', 50)->get();
         foreach ($comments as $comment) {
             // Check if the IP is already blocked
             $existingIp = BlockedIp::where('ip', $comment->creator_ip)->first();
-            
+
             // If IP doesn't exist in blocked_ips table, block it
             if (!$existingIp) {
                 BlockedIp::create(['ip' => $comment->creator_ip]);

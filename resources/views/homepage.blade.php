@@ -2,6 +2,7 @@
 
 @section("head")
 <!-- This is where your head goes (jk) this is where the stuff you want to put in your head goes -->
+
 @endsection
 
 @section("content")
@@ -20,10 +21,11 @@
             @endif
 
             @auth
-            <div class="alert alert-info m-4 mt-0 d-flex justify-content-center" role="alert">
+            <div class="alert alert-info mx-4 mt-0 mb-0 d-flex justify-content-center" role="alert">
                 <h6 class="">Logged in as: {{ auth()->user()->username }} (Moderator)</h6>
             </div>
             @endauth
+            
             <!-- Row with "What's this" and "Topics" -->
             <div class="row mb-4 mt-4">
                 <div class="col-md-8">
@@ -90,6 +92,9 @@
                         @endif
                     </div>
                 </div>
+                <div class="card-footer text-center">
+                    <a class="" href="{{route('thread.list')}}">View All Hot Threads</a>
+                </div>
             </div>
         </div>
 
@@ -111,6 +116,9 @@
                     </div>
                 </div>
                 <!-- Additional news items can be added here -->
+            </div>
+            <div class="card-footer text-center">
+                <a class="" href="{{route('news')}}">View All News</a>
             </div>
         </div>
 

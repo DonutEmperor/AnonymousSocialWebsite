@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Thread extends Model
 {
     use HasFactory;
+    use Searchable;
 
     // public $timestamps = false;
     protected $fillable = ['topic_id', 'title', 'content', 'created_at', 'updated_at', 'upvotes', 'downvotes', 'report_count' , 'creator_ip'];

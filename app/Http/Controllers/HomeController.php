@@ -69,4 +69,16 @@ class HomeController extends Controller
 
         return view('error404', compact('navbar', 'footer'));
     }
+
+    public function viewNews(){
+        $footer = "true";
+
+        if (auth()->check()) {
+            $navbar = "mod-navbar"; // User is logged in
+        } else {
+            $navbar = "without-options"; // User is not logged in
+        }
+
+        return view('news', compact('navbar', 'footer'));
+    }
 }

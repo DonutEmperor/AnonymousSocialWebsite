@@ -47,8 +47,7 @@ class ThreadController extends Controller
             $thread->title = $req->input('title');
             $thread->content = $req->input('content');
             $thread->topic_id = $req->input('topic_id');
-            $userIP = $req->ip();
-            $thread-> creator_ip = $userIP;
+            $thread->creator_ip = encrypt($req->ip());
 
             $thread->save();
 
@@ -152,91 +151,21 @@ class ThreadController extends Controller
         ]);
     }
 
+    public function viewHotThread()
+    {
+        $footer = "true";
 
-    //Actually useless -> schedule to remove in the near future 
-    // public function unvote(Request $request, $id)
-    // {
-    //     $thread = Thread::findOrFail($id);
+        if (auth()->check()) {
+            $navbar = "mod-navbar"; // User is logged in
+        } else {
+            $navbar = "without-options"; // User is not logged in
+        }
 
-    //     $previousVote = Cookie::get('vote_' . $id);
+        $threads = Thread::orderBy('upvotes', 'desc')->get();
+        if ($threads->isEmpty()) {
+            return redirect()->route('not-found'); // Show a 404 error page
+        }
 
-    //     if ($previousVote === 'upvote') {
-    //         $thread->upvotes--;
-    //     } elseif ($previousVote === 'downvote') {
-    //         $thread->downvotes--;
-    //     }
-
-    //     $thread->save();
-
-    //     Cookie::queue('vote_' . $id, null, -1); // Delete the cookie
-    //     Cookie::queue('active_' . $id, null, -1); // Delete the cookie
-
-    //     return response()->json([
-    //         'upvotes' => $thread->upvotes,
-    //         'downvotes' => $thread->downvotes,
-    //     ]);
-    // }
-
-
-
-    // public function upvote(Request $request, $id)
-    // {
-    //     $thread = Thread::findOrFail($id);
-
-    //     if (!Session::has('vote_' . $thread->id) || Session::get('vote_' . $thread->id) === 'downvote') {
-    //         $thread->upvotes++;
-    //         $thread->downvotes--;
-
-    //         $thread->save();
-
-    //         Session::put('vote_' . $thread->id, 'upvote');
-    //     }
-
-
-    //     return response()->json([
-    //         'upvotes' => $thread->upvotes,
-    //         'downvotes' => $thread->downvotes,
-    //     ]);
-    // }
-
-    // public function downvote(Request $request, $id)
-    // {
-    //     $thread = Thread::findOrFail($id);
-    //     if (!Session::has('vote_' . $thread->id) || Session::get('vote_' . $thread->id) === 'upvote') {
-    //         $thread->upvotes--;
-    //         $thread->downvotes++;
-
-    //         $thread->save();
-
-    //         Session::put('vote_' . $thread->id, 'downvote');
-    //     }
-    //     return response()->json([
-    //         'upvotes' => $thread->upvotes,
-    //         'downvotes' => $thread->downvotes,
-    //     ]);
-    // }
-
-    // public function unvote(Request $request, $id)
-    // {
-    //     $thread = Thread::findOrFail($id);
-
-    //     if (Session::has('vote_' . $id)) {
-    //         $previousVote = Session::get('vote_' . $id);
-
-    //         if ($previousVote === 'upvote') {
-    //             $thread->upvotes--;
-    //         } elseif ($previousVote === 'downvote') {
-    //             $thread->downvotes--;
-    //         }
-
-    //         $thread->save();
-
-    //         Session::forget('vote_' . $id);
-    //     }
-
-    //     return response()->json([
-    //         'upvotes' => $thread->upvotes,
-    //         'downvotes' => $thread->downvotes,
-    //     ]);
-    // }
+        return view('thread-list', compact('navbar', 'footer', 'threads'));
+    }
 }

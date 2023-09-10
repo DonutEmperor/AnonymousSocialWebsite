@@ -5,7 +5,7 @@
 @endsection
 
 @section("content")
-<div class="">
+<div class="mod-page-content">
     <!-- This is where your content goes -->
     <div class="container ">
 
@@ -37,6 +37,10 @@
             @elseif(session('thread-delete-success'))
             <div class="alert alert-success m-4">
                 {{ session('thread-delete-success') }}
+            </div>
+            @elseif(session('thread-ban-success'))
+            <div class="alert alert-success m-4">
+                {{ session('thread-ban-success') }}
             </div>
             @elseif(session('success_comment'))
             <div class="alert alert-success m-4">
@@ -148,7 +152,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>                                     
                                     </div>
                                     @endforeach
                                 </div>
@@ -261,6 +265,36 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <!-- Ban Thread Button -->
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#confirmThreadBan{{ $thread->id }}">
+                                            Ban Thread
+                                        </button>
+                                        <!-- Confirmation Modal -->
+                                        <div class="modal fade" id="confirmThreadBan{{ $thread->id }}" tabindex="-1" role="dialog" aria-labelledby="confirmThreadBanLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="confirmThreadBanLabel">Confirm Ban</h5>
+                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="text-danger">Doing so will result in selected thread deleted and associated IP banned.</p>
+                                                        <p>Do you still wish to proceed?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form action="{{ route('mod-thread.ban', ['id' => $thread->id]) }}" method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger">Ban</button>
+                                                        </form>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>                                         
                                     </div>
                                     @endif
                                     @endforeach
@@ -367,6 +401,36 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <!-- Ban Comment Button -->
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#confirmCommentBan{{ $comment->id }}">
+                                            Ban Comment
+                                        </button>
+                                        <!-- Confirmation Modal -->
+                                        <div class="modal fade" id="confirmCommentBan{{ $comment->id }}" tabindex="-1" role="dialog" aria-labelledby="confirmCommentBanLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="confirmCommentBanLabel">Confirm Ban</h5>
+                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="text-alert">Doing so will result in selected thread deleted and associated IP banned.</p>
+                                                        <p>Do you still wish to proceed?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form action="{{ route('mod-comment.ban', ['id' => $comment->id]) }}" method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger">Ban</button>
+                                                        </form>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>                                        
                                     </div>
                                     @endif
                                     @endforeach

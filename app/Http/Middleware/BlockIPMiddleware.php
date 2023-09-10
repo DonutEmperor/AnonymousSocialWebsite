@@ -17,18 +17,45 @@ class BlockIPMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // // Get the user's IP address
+        // $userIp = $request->ip();
+        
+        // // Check if the user's IP is in the blockedip table
+        // $encryptedBlockedIps = BlockedIp::select('ip')->get();
+        // foreach ($encryptedBlockedIps as $blockedIp) {
+        //     if($blockedIp->ip!=null && $blockedIp->ip!=""){
+        //         $decryptedBlockedIp = decrypt($blockedIp->ip);
+        //         // Compare the decrypted IP with the user's IP
+        //         if ($decryptedBlockedIp === $userIp) {
+        //             // The user's IP is blocked
+        //             // IP is blocked, return a response or redirect as needed
+        //             return redirect()->route('blocked');
+
+        //             // Exit the loop since the user is blocked
+        //         }
+        //     }
+        // }
+        // // IP is not blocked, allow access
+        // return $next($request);
+        // Get the user's IP address
         // Get the user's IP address
         $userIp = $request->ip();
 
-        // Check if the user's IP is in the blockedip table
-        $blockedIp = BlockedIp::where('ip', $userIp)->first();
-
-        if ($blockedIp) {
-            // IP is blocked, return a response or redirect as needed
-            return redirect()->route('blocked'); // You can create a 'blocked' route for this purpose.
+        // Decrypt the IP addresses from your database and check if the user's IP is in the blockedip table
+        $encryptedBlockedIps = BlockedIp::select('ip')->get();
+        foreach ($encryptedBlockedIps as $blockedIp) {
+            $decryptedBlockedIp = decrypt($blockedIp->ip);
+            
+            // Compare the decrypted IP with the user's IP
+            if ($decryptedBlockedIp === $userIp) {
+                // The user's IP is blocked
+                // IP is blocked, return a response or redirect as needed
+                return redirect()->route('blocked');
+            }
         }
 
         // IP is not blocked, allow access
         return $next($request);
+       
     }
 }

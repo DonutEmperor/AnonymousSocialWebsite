@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BlockedIp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -119,6 +120,22 @@ class ModeratorController extends Controller
         }
     }
 
+    public function banThread($id)
+    {
+        try {
+            $thread = Thread::findOrFail($id);
+            $ban_table = new BlockedIp();
+            $ban_table->ip = $thread->creator_ip;
+
+            $ban_table->save();
+            $thread->delete();
+
+            return redirect()->route('mod')->with('thread-ban-success', 'Thread banned successfully');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['thread-ban' => 'Error banning thread.']);
+        }
+    }
+
     public function updateComment(Request $req, $id)
     {
         $req->validate([
@@ -144,4 +161,21 @@ class ModeratorController extends Controller
             return redirect()->back()->withErrors(['comment-deletion' => 'Error deleting comment.']);
         }
     }
+
+    public function banComment($id)
+    {
+        try {
+            $comment = Comment::findOrFail($id);
+            $ban_table = new BlockedIp();
+            $ban_table->ip = $comment->creator_ip;
+            
+            $ban_table->save();
+            $comment->delete();
+
+            return redirect()->route('mod')->with('comment-delete-success', 'Comment deleted successfully');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['comment-deletion' => 'Error deleting comment.']);
+        }
+    }
+
 }

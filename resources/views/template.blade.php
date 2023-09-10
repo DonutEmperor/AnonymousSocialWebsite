@@ -21,7 +21,22 @@
 
     <!-- cdn - sweetalert
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+    <style>
+        /* CSS Styles for chatbot container */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            /* Adjust the distance from the bottom as needed */
+            right: 20px;
+            /* Adjust the distance from the right as needed */
+            /* Ensure the chatbot is above other elements */
+        }
 
+        .chatbot-icon {
+            height: 28px;
+            width: 30px;
+        }
+    </style>
     @yield("head")
 </head>
 
@@ -37,10 +52,54 @@
 
     <!-- Content Area -->
     <div class="container-fluid pt-5 mt-5">
-
         <div class="row">
             <div class="col-12">
                 <div class="block-content">
+                    <div class="chatbot-container">
+                        <!-- Chatbot Modal -->
+                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#chatbotModal">
+                            <img src="/assets/img/chatbot.png" alt="Chatbot Icon" class="chatbot-icon">
+                        </button>
+                    </div>
+                    <div class="modal fade" id="chatbotModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="chatbotModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="chatbotModalLabel">Chat with ChatGPT</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Chat -->
+                                    <div class="messages">
+                                        <div class="left message">
+                                            <p>Start chatting with Chat GPT AI below!!</p>
+                                        </div>
+                                    </div>
+                                    <!-- End Chat -->
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="bottom">
+                                        <form id="chat-box-form">
+                                            <input class="rounded" type="text" id="message" name="message" placeholder="Enter message..." autocomplete="off" style="width: 400px;height:40px">
+                                            <button class="btn btn-success" type="submit">Send</button>
+                                        </form>
+                                    </div>
+
+                                    <!-- <form action="#" method="post">
+                                        <div class="input-group">
+                                            <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+                                            <span class="input-group-btn">
+                                                <button type="submit" class="btn btn-primary btn-flat">Send</button>
+                                            </span>
+                                        </div>
+                                    </form> -->
+
+                                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     @yield("content")
                 </div>
                 <!-- cdn - bootstrap js -->
