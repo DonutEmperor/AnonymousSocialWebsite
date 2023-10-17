@@ -195,7 +195,7 @@
                                 <p style="overflow:hidden;">{{$thread->content}}.</p>
                                 <button class="btn btn-sm btn-success upvote-button" data-id="{{$thread->id}}">^</button>
                                 <button class="btn btn-sm btn-danger downvote-button" data-id="{{$thread->id}}">v</button>
-                                <a class="btn btn-sm btn-warning">Report</a>
+                                <!-- <a class="btn btn-sm btn-warning">Report</a> -->
                                 <a class="btn btn-sm btn-info" href="{{ route('thread', ['id' => $thread->id]) }}">Comment</a>
                             </div>
                             @endforeach

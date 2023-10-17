@@ -77,7 +77,7 @@
                                     </p>
                                     <button class="btn btn-sm btn-success upvote-button" data-id="{{$thread->id}}">^</button>
                                     <button class="btn btn-sm btn-danger downvote-button" data-id="{{$thread->id}}">v</button>
-                                    <a class="btn btn-sm btn-warning">Report</a>
+                                    <!-- <a class="btn btn-sm btn-warning">Report</a> -->
                                     @auth
                                     <!-- Delete Thread Button -->
                                     <button type="button" class="btn btn-danger py-1 px-1" data-bs-toggle="modal" data-bs-target="#confirmDelete{{ $thread->id }}">
@@ -189,7 +189,7 @@
                         <!-- <p class="mb-3"> {{$comment->upvotes}} upvotes | {{$comment->downvotes}} downvotes | {{$comment->created_at}} </p> -->
                         <button class="btn btn-sm btn-success comment-upvote-button" data-comment-id="{{ $comment->id }}">^</button>
                         <button class="btn btn-sm btn-danger comment-downvote-button" data-comment-id="{{ $comment->id }}">v</button>
-                        <a class="btn btn-sm btn-warning">Report</a>
+                        <!-- <a class="btn btn-sm btn-warning">Report</a> -->
                         @auth
                         <!-- This is the "update comment" modal -->
                         <button type="button" class="btn btn-primary px-1 py-1" data-bs-toggle="modal" data-bs-target="#updateComment{{ $comment->id }}">

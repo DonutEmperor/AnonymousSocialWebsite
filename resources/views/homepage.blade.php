@@ -25,7 +25,7 @@
                 <h6 class="">Logged in as: {{ auth()->user()->username }} (Moderator)</h6>
             </div>
             @endauth
-            
+
             <!-- Row with "What's this" and "Topics" -->
             <div class="row mb-4 mt-4">
                 <div class="col-md-8">
@@ -76,7 +76,7 @@
                                 <p>{{ $thread->content }}.</p>
                                 <button class="btn btn-sm btn-success upvote-button" data-id="{{$thread->id}}">^</button>
                                 <button class="btn btn-sm btn-danger downvote-button" data-id="{{$thread->id}}">v</button>
-                                <a class="btn btn-sm btn-warning">Report</a>
+                                <!-- <a class="btn btn-sm btn-warning">Report</a> -->
                                 <a class="btn btn-sm btn-info" href="{{ route('thread', ['id' => $thread->id]) }}">Comment</a>
                         </div>
                         @php

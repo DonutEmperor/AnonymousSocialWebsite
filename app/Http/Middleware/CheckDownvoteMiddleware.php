@@ -28,6 +28,8 @@ class CheckDownvoteMiddleware
             if (!$existingIp) {
                 BlockedIp::create(['ip' => $thread->creator_ip]);
             }
+            // thread is deleted
+            $thread->delete();
         }
 
         // Check downvotes for comments
@@ -40,6 +42,8 @@ class CheckDownvoteMiddleware
             if (!$existingIp) {
                 BlockedIp::create(['ip' => $comment->creator_ip]);
             }
+            // comment is deleted
+            $comment->delete();
         }
 
         return $next($request);
